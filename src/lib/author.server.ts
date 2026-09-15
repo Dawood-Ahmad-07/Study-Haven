@@ -75,7 +75,8 @@ export async function requireAuthor(): Promise<void> {
   }
 }
 
-const ITERATIONS = 150_000;
+// The production Web Crypto runtime caps PBKDF2 at 100,000 iterations.
+const ITERATIONS = 100_000;
 
 function toHex(buf: ArrayBuffer): string {
   return Array.from(new Uint8Array(buf))
@@ -121,6 +122,8 @@ function timingSafeEqualHex(a: string, b: string): boolean {
 export async function verifyPassword(password: string, stored: string): Promise<boolean> {
   const parts = stored.split("$");
   if (parts.length !== 4 || parts[0] !== "pbkdf2") return false;
+  const iterations = Number(parts[1]);
+  if (!Number.isInteger(iterations) || iterations < 1 || iterations > ITERATIONS) return false;
   const salt = fromHex(parts[2]!);
   const key = await crypto.subtle.importKey(
     "raw",
@@ -133,7 +136,7 @@ export async function verifyPassword(password: string, stored: string): Promise<
     {
       name: "PBKDF2",
       salt: salt as BufferSource,
-      iterations: Number(parts[1]),
+      iterations,
       hash: "SHA-256",
     },
     key,
