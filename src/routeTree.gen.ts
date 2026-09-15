@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AuthorIndexRouteImport } from './routes/author.index'
+import { Route as AuthorDashboardRouteImport } from './routes/author.dashboard'
 import { Route as SubjectsSlugRouteImport } from './routes/subjects.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const AuthorIndexRoute = AuthorIndexRouteImport.update({
   path: '/author/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthorDashboardRoute = AuthorDashboardRouteImport.update({
+  id: '/author/dashboard',
+  path: '/author/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SubjectsSlugRoute = SubjectsSlugRouteImport.update({
   id: '/subjects/$slug',
   path: '/subjects/$slug',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/library': typeof LibraryRoute
   '/search': typeof SearchRoute
+  '/author/dashboard': typeof AuthorDashboardRoute
   '/subjects/$slug': typeof SubjectsSlugRoute
   '/author/': typeof AuthorIndexRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/library': typeof LibraryRoute
   '/search': typeof SearchRoute
+  '/author/dashboard': typeof AuthorDashboardRoute
   '/subjects/$slug': typeof SubjectsSlugRoute
   '/author': typeof AuthorIndexRoute
 }
@@ -60,21 +68,42 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/library': typeof LibraryRoute
   '/search': typeof SearchRoute
+  '/author/dashboard': typeof AuthorDashboardRoute
   '/subjects/$slug': typeof SubjectsSlugRoute
   '/author/': typeof AuthorIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/library' | '/search' | '/subjects/$slug' | '/author/'
+  fullPaths:
+    | '/'
+    | '/library'
+    | '/search'
+    | '/author/dashboard'
+    | '/subjects/$slug'
+    | '/author/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/library' | '/search' | '/subjects/$slug' | '/author'
-  id: '__root__' | '/' | '/library' | '/search' | '/subjects/$slug' | '/author/'
+  to:
+    | '/'
+    | '/library'
+    | '/search'
+    | '/author/dashboard'
+    | '/subjects/$slug'
+    | '/author'
+  id:
+    | '__root__'
+    | '/'
+    | '/library'
+    | '/search'
+    | '/author/dashboard'
+    | '/subjects/$slug'
+    | '/author/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LibraryRoute: typeof LibraryRoute
   SearchRoute: typeof SearchRoute
+  AuthorDashboardRoute: typeof AuthorDashboardRoute
   SubjectsSlugRoute: typeof SubjectsSlugRoute
   AuthorIndexRoute: typeof AuthorIndexRoute
 }
@@ -109,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/author/dashboard': {
+      id: '/author/dashboard'
+      path: '/author/dashboard'
+      fullPath: '/author/dashboard'
+      preLoaderRoute: typeof AuthorDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/subjects/$slug': {
       id: '/subjects/$slug'
       path: '/subjects/$slug'
@@ -123,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LibraryRoute: LibraryRoute,
   SearchRoute: SearchRoute,
+  AuthorDashboardRoute: AuthorDashboardRoute,
   SubjectsSlugRoute: SubjectsSlugRoute,
   AuthorIndexRoute: AuthorIndexRoute,
 }
