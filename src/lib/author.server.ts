@@ -1,4 +1,6 @@
 import { useSession } from "@tanstack/react-start/server";
+import { pbkdf2 } from "@noble/hashes/pbkdf2.js";
+import { sha256 } from "@noble/hashes/sha2.js";
 
 type AuthorSession = { author?: boolean };
 
@@ -90,19 +92,7 @@ function fromHex(hex: string): Uint8Array {
 }
 
 async function derive(password: string, salt: Uint8Array): Promise<string> {
-  const key = await crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(password),
-    "PBKDF2",
-    false,
-    ["deriveBits"],
-  );
-  const bits = await crypto.subtle.deriveBits(
-    { name: "PBKDF2", salt: salt as BufferSource, iterations: ITERATIONS, hash: "SHA-256" },
-    key,
-    256,
-  );
-  return toHex(bits);
+  return toHex(pbkdf2(sha256, new TextEncoder().encode(password), salt, { c: ITERATIONS, dkLen: 32 }).buffer);
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -121,25 +111,14 @@ function timingSafeEqualHex(a: string, b: string): boolean {
 export async function verifyPassword(password: string, stored: string): Promise<boolean> {
   const parts = stored.split("$");
   if (parts.length !== 4 || parts[0] !== "pbkdf2") return false;
+  const iterations = Number(parts[1]);
+  if (!Number.isInteger(iterations) || iterations < 1 || iterations > 1_000_000) return false;
   const salt = fromHex(parts[2]!);
-  const key = await crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(password),
-    "PBKDF2",
-    false,
-    ["deriveBits"],
-  );
-  const bits = await crypto.subtle.deriveBits(
-    {
-      name: "PBKDF2",
-      salt: salt as BufferSource,
-      iterations: Number(parts[1]),
-      hash: "SHA-256",
-    },
-    key,
-    256,
-  );
-  return timingSafeEqualHex(toHex(bits), parts[3]!);
+  const bits = pbkdf2(sha256, new TextEncoder().encode(password), salt, {
+    c: iterations,
+    dkLen: 32,
+  });
+  return timingSafeEqualHex(toHex(bits.buffer), parts[3]!);
 }
 
 /** Reads the stored password hash, seeding it from the AUTHOR_PASSWORD secret on first use. */
