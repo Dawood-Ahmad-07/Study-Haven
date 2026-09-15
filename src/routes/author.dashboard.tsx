@@ -519,7 +519,13 @@ function NotesManager({ subjectId, notes }: { subjectId: string; notes: Note[] }
   const save = usePortalMutation(
     () =>
       saveNote({
-        data: { id: editing?.id, subjectId, title, content, topic: topic || null },
+        data: {
+          ...(editing ? { id: editing.id } : {}),
+          subjectId,
+          title,
+          content,
+          topic: topic || null,
+        },
       }),
     editing ? "Note updated." : "Note added.",
   );
