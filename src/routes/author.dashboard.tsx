@@ -280,7 +280,7 @@ function SubjectForm({ subject, onDone }: { subject?: Subject; onDone: () => voi
     () =>
       saveSubject({
         data: {
-          id: subject?.id,
+          ...(subject ? { id: subject.id } : {}),
           name,
           description,
           coverUrl,
