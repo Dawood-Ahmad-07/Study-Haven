@@ -14,7 +14,9 @@ function sessionConfig() {
     cookie: {
       httpOnly: true,
       secure: true,
-      sameSite: "lax" as const,
+      // The app is viewed inside the Lovable preview iframe (cross-site),
+      // so the session cookie must be SameSite=None to be sent back.
+      sameSite: "none" as const,
       path: "/",
     },
   };
