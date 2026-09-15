@@ -14,7 +14,189 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      files: {
+        Row: {
+          created_at: string
+          description: string | null
+          drive_file_id: string
+          id: string
+          kind: string
+          mime_type: string
+          size_bytes: number | null
+          subject_id: string
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          view_url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          drive_file_id: string
+          id?: string
+          kind: string
+          mime_type?: string
+          size_bytes?: number | null
+          subject_id: string
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          view_url?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          drive_file_id?: string
+          id?: string
+          kind?: string
+          mime_type?: string
+          size_bytes?: number | null
+          subject_id?: string
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          view_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "files_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      links: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          subject_id: string
+          title: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          subject_id: string
+          title: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          subject_id?: string
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "links_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          subject_id: string
+          title: string
+          topic: string | null
+          updated_at: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          id?: string
+          subject_id: string
+          title: string
+          topic?: string | null
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          subject_id?: string
+          title?: string
+          topic?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notes_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portal_settings: {
+        Row: {
+          created_at: string
+          id: number
+          password_hash: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          password_hash?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          password_hash?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subjects: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          description: string
+          id: string
+          name: string
+          position: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          name: string
+          position?: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          position?: number
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
