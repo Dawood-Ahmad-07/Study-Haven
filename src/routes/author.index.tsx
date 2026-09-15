@@ -40,6 +40,8 @@ function AuthorLogin() {
     onSuccess: async (result) => {
       if (result.ok) {
         setMessage(null);
+        const { setAuthorToken } = await import("@/lib/author-token");
+        if (result.token) setAuthorToken(result.token);
         await queryClient.invalidateQueries({ queryKey: ["author-status"] });
         navigate({ to: "/author/dashboard" });
         return;

@@ -26,7 +26,7 @@ export const authorLogin = createServerFn({ method: "POST" })
 
     const session = await getAuthorSession();
     await session.update({ author: true });
-    return { ok: true as const };
+    return { ok: true as const, token: await issueAuthorToken() };
   });
 
 export const authorLogout = createServerFn({ method: "POST" }).handler(async () => {
