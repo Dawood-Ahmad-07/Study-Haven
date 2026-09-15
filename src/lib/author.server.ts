@@ -26,7 +26,44 @@ export async function getAuthorSession() {
   return useSession<AuthorSession>(sessionConfig());
 }
 
+const TOKEN_TTL_MS = 1000 * 60 * 60 * 24 * 14;
+
+function secret(): string {
+  const value = process.env["AUTHOR_SESSION_SECRET"];
+  if (!value) throw new Error("AUTHOR_SESSION_SECRET is not configured");
+  return value;
+}
+
+async function sign(payload: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret()),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload));
+  return toHex(sig);
+}
+
+/** Bearer-style author token — works where third-party cookies are blocked (preview iframe). */
+export async function issueAuthorToken(): Promise<string> {
+  const exp = Date.now() + TOKEN_TTL_MS;
+  return `${exp}.${await sign(`author:${exp}`)}`;
+}
+
+async function verifyAuthorToken(token: string | undefined): Promise<boolean> {
+  if (!token) return false;
+  const [expRaw, sig] = token.split(".");
+  const exp = Number(expRaw);
+  if (!expRaw || !sig || !Number.isFinite(exp) || exp < Date.now()) return false;
+  return timingSafeEqualHex(await sign(`author:${exp}`), sig);
+}
+
 export async function isAuthor(): Promise<boolean> {
+  const { getRequestHeader } = await import("@tanstack/react-start/server");
+  const header = getRequestHeader("x-author-token" as never);
+  if (await verifyAuthorToken(header)) return true;
   const session = await getAuthorSession();
   return session.data.author === true;
 }
