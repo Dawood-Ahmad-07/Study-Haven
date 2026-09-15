@@ -15,9 +15,8 @@ export const authorLogin = createServerFn({ method: "POST" })
     return { password: data.password };
   })
   .handler(async ({ data }) => {
-    const { getStoredPasswordHash, verifyPassword, getAuthorSession } = await import(
-      "./author.server"
-    );
+    const { getStoredPasswordHash, verifyPassword, getAuthorSession, issueAuthorToken } =
+      await import("./author.server");
     const stored = await getStoredPasswordHash();
     if (!stored) {
       return { ok: false as const, reason: "not-configured" as const };
@@ -27,7 +26,7 @@ export const authorLogin = createServerFn({ method: "POST" })
 
     const session = await getAuthorSession();
     await session.update({ author: true });
-    return { ok: true as const };
+    return { ok: true as const, token: await issueAuthorToken() };
   });
 
 export const authorLogout = createServerFn({ method: "POST" }).handler(async () => {

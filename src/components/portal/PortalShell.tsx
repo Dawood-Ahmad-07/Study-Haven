@@ -53,7 +53,11 @@ export function PortalShell({ children }: { children: ReactNode }) {
   }, [search.q]);
 
   const logout = useMutation({
-    mutationFn: () => authorLogout(),
+    mutationFn: async () => {
+      const { clearAuthorToken } = await import("@/lib/author-token");
+      clearAuthorToken();
+      return authorLogout();
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["author-status"] });
       navigate({ to: "/" });
