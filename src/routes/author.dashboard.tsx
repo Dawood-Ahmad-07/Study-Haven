@@ -822,7 +822,13 @@ function LinksManager({ subjectId, links }: { subjectId: string; links: UsefulLi
   const save = usePortalMutation(
     () =>
       saveLink({
-        data: { id: editing?.id, subjectId, title, url, description: description || null },
+        data: {
+          ...(editing ? { id: editing.id } : {}),
+          subjectId,
+          title,
+          url,
+          description: description || null,
+        },
       }),
     editing ? "Link updated." : "Link added.",
   );
