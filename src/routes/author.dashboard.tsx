@@ -435,6 +435,14 @@ function PasswordPanel() {
           onChange={(event) => setNext(event.target.value)}
           placeholder="New password (min 8 characters)"
         />
+        <input
+          className={fieldClass}
+          type="password"
+          autoComplete="off"
+          value={ownerKey}
+          onChange={(event) => setOwnerKey(event.target.value)}
+          placeholder="Owner key (only you have this)"
+        />
         <button type="submit" disabled={change.isPending} className={`${primaryButton} w-full`}>
           {change.isPending ? "Updating…" : "Update password"}
         </button>
