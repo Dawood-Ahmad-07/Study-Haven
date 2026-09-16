@@ -66,13 +66,13 @@ export function PortalShell({ children }: { children: ReactNode }) {
     <div className="relative min-h-screen font-body text-foreground">
       <AmbientBackdrop />
 
-      <header className="relative z-20 px-4 pt-4 sm:px-6 sm:pt-6">
-        <div className="glass-strong shadow-soft mx-auto flex max-w-7xl flex-wrap items-center gap-3 rounded-2xl border border-glass-border px-3 py-3 sm:px-5">
+      <header className="sticky top-0 z-20 px-3 pt-3 sm:px-6 sm:pt-5">
+        <div className="glass-strong shadow-soft mx-auto flex max-w-7xl flex-wrap items-center gap-2.5 rounded-2xl border border-glass-border px-3 py-2.5 sm:gap-4 sm:px-4">
           <Link to="/" className="flex shrink-0 items-center gap-2.5">
-            <span className="gradient-brand grid size-9 place-items-center rounded-xl font-display font-bold text-primary-foreground">
+            <span className="gradient-brand grid size-8 place-items-center rounded-lg font-display text-sm font-bold text-primary-foreground">
               S
             </span>
-            <span className="font-display text-lg font-semibold tracking-tight">Syllable</span>
+            <span className="font-display text-[17px] font-semibold tracking-tight">Syllable</span>
           </Link>
 
           <form
