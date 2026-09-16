@@ -97,7 +97,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
           <nav className="order-2 ml-auto flex items-center gap-2 sm:order-3">
             <Link
               to="/library"
-              className="hidden items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:flex"
+              className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:flex"
             >
               <Library className="size-4" />
               Library
@@ -106,14 +106,14 @@ export function PortalShell({ children }: { children: ReactNode }) {
               <>
                 <Link
                   to="/author/dashboard"
-                  className="gradient-brand rounded-lg px-3.5 py-2 text-sm font-semibold text-primary-foreground"
+                  className="gradient-brand shadow-soft rounded-full px-4 py-2 text-sm font-semibold text-primary-foreground"
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={() => logout.mutate()}
                   aria-label="Leave author mode"
-                  className="glass grid size-9 place-items-center rounded-lg border border-glass-border text-muted-foreground transition-colors hover:text-foreground"
+                  className="grid size-9 place-items-center rounded-full border border-glass-border bg-secondary text-muted-foreground transition-colors hover:text-foreground"
                 >
                   <LogOut className="size-4" />
                 </button>
@@ -121,7 +121,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
             ) : (
               <Link
                 to="/author"
-                className="glass flex items-center gap-1.5 rounded-lg border border-glass-border px-3.5 py-2 text-sm font-semibold transition-colors hover:text-primary"
+                className="flex items-center gap-1.5 rounded-full border border-glass-border bg-secondary px-4 py-2 text-sm font-semibold transition-colors hover:text-primary"
               >
                 <ShieldCheck className="size-4" />
                 Author
@@ -165,7 +165,7 @@ export function GlassPanel({
   return (
     <div
       className={cn(
-        "glass shadow-glass rounded-3xl border border-glass-border p-6 sm:p-7",
+        "glass shadow-soft rounded-2xl border border-glass-border p-6 sm:p-8",
         className,
       )}
     >
@@ -184,7 +184,7 @@ export function EmptyState({
   icon: typeof Search;
 }) {
   return (
-    <div className="glass flex flex-col items-center rounded-3xl border border-glass-border px-6 py-14 text-center">
+    <div className="glass shadow-soft flex flex-col items-center rounded-2xl border border-glass-border px-6 py-16 text-center">
       <span className="gradient-cool grid size-12 place-items-center rounded-2xl text-primary-foreground">
         <Icon className="size-5" />
       </span>
