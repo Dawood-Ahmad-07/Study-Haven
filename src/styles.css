@@ -56,7 +56,7 @@
   --font-body-family: "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --ink: oklch(0.27 0.052 267.5);
-  --mist: oklch(0.666 0.044 271.6);
+  --mist: oklch(0.585 0.038 271.6);
   --sky: oklch(0.61 0.21 268.2);
   --violet: oklch(0.599 0.23 286.2);
   --cyan: oklch(0.754 0.139 232.7);
@@ -78,21 +78,21 @@
   --accent-foreground: oklch(0.99 0.003 270);
   --destructive: oklch(0.586 0.222 17.6);
   --destructive-foreground: oklch(0.99 0.003 270);
-  --border: oklch(1 0 0 / 65%);
-  --glass-border: oklch(1 0 0 / 60%);
+  --border: oklch(0.92 0.012 275 / 85%);
+  --glass-border: oklch(0.92 0.012 275 / 85%);
   --input: oklch(1 0 0 / 75%);
   --ring: var(--sky);
 
   --gradient-ground: linear-gradient(
     160deg,
-    oklch(0.955 0.021 268.4) 0%,
-    oklch(0.968 0.018 300.1) 45%,
-    oklch(0.965 0.015 181.8) 100%
+    oklch(0.972 0.013 268.4) 0%,
+    oklch(0.979 0.009 300.1) 55%,
+    oklch(0.976 0.008 181.8) 100%
   );
   --gradient-brand: linear-gradient(135deg, var(--sky), var(--violet));
   --gradient-cool: linear-gradient(135deg, var(--cyan), var(--sky));
-  --shadow-glass: 0 24px 60px -28px color-mix(in oklab, var(--ink) 45%, transparent);
-  --shadow-soft: 0 18px 50px -20px color-mix(in oklab, var(--ink) 38%, transparent);
+  --shadow-glass: 0 18px 44px -26px color-mix(in oklab, var(--ink) 26%, transparent);
+  --shadow-soft: 0 12px 34px -20px color-mix(in oklab, var(--ink) 22%, transparent);
 }
 
 @layer base {
@@ -126,13 +126,13 @@
 }
 
 @utility glass {
-  background: oklch(1 0 0 / 55%);
-  backdrop-filter: blur(20px) saturate(160%);
+  background: oklch(1 0 0 / 68%);
+  backdrop-filter: blur(18px) saturate(140%);
 }
 
 @utility glass-strong {
-  background: oklch(1 0 0 / 72%);
-  backdrop-filter: blur(28px) saturate(170%);
+  background: oklch(1 0 0 / 84%);
+  backdrop-filter: blur(24px) saturate(150%);
 }
 
 @utility gradient-brand {
@@ -168,5 +168,23 @@
 }
 
 @utility animate-float-slow {
-  animation: float-slow 14s ease-in-out infinite;
+  animation: float-slow 26s ease-in-out infinite;
+}
+
+@utility eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
