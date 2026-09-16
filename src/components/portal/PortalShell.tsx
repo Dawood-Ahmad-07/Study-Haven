@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authorLogout, getAuthorStatus } from "@/lib/portal.functions";
 import { cn } from "@/lib/utils";
+import { useViewOnly } from "@/lib/view-mode";
 
 export function useAuthorStatus() {
   const viewOnly = useViewOnly();
