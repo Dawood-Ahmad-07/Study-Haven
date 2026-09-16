@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Library, LogOut, Search, ShieldCheck } from "lucide-react";
+import { Library, LogOut, Search, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authorLogout, getAuthorStatus } from "@/lib/portal.functions";
@@ -137,8 +137,21 @@ export function PortalShell({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      <footer className="relative z-10 border-t border-glass-border/60 py-6 text-center text-xs text-muted-foreground">
-        Syllable — a study material portal. Viewing is open to everyone.
+      <footer className="relative z-10 px-4 pb-8 pt-4 sm:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-4">
+          <div className="glass shadow-soft flex items-center gap-2.5 rounded-full border border-glass-border px-5 py-2.5">
+            <Sparkles className="size-3.5 text-primary" aria-hidden />
+            <span className="text-xs text-muted-foreground sm:text-[13px]">
+              Crafted with care — developed by{" "}
+              <span className="font-display font-semibold tracking-tight">
+                <span className="text-gradient-brand">Dawood Ahmad</span>
+              </span>
+            </span>
+          </div>
+          <p className="text-center text-xs text-muted-foreground/70">
+            Syllable — a study material portal. Viewing is open to everyone.
+          </p>
+        </div>
       </footer>
     </div>
   );
