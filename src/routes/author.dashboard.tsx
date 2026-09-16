@@ -17,14 +17,13 @@ import {
 import { toast } from "sonner";
 import { PortalShell, useAuthorStatus } from "@/components/portal/PortalShell";
 import {
-  countsFor,
   formatBytes,
   formatDate,
-  portalQueryOptions,
   type Note,
   type Subject,
   type UsefulLink,
 } from "@/lib/portal-data";
+import { countsFor, portalQueryOptions } from "@/lib/author-data";
 import { MAX_UPLOAD_BYTES, fileToBase64 } from "@/lib/file-input";
 import {
   changeAuthorPassword,
