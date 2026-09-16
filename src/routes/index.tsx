@@ -4,6 +4,7 @@ import { BookOpenCheck, Eye, FileText, Images, Link2, ShieldCheck } from "lucide
 import { AmbientBackdrop } from "@/components/portal/PortalShell";
 import { statsQueryOptions } from "@/lib/portal-data";
 import { authorLogout } from "@/lib/portal.functions";
+import { clearViewOnly, setViewOnly } from "@/lib/view-mode";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,12 +35,14 @@ function Entry() {
   async function enterViewOnly() {
     const { clearAuthorToken } = await import("@/lib/author-token");
     clearAuthorToken();
+    setViewOnly();
+    queryClient.removeQueries({ queryKey: ["author-status"] });
     try {
       await authorLogout();
     } catch {
       /* viewing must work even if the sign-out call fails */
     }
-    await queryClient.invalidateQueries({ queryKey: ["author-status"] });
+    queryClient.removeQueries({ queryKey: ["author-status"] });
     navigate({ to: "/library" });
   }
 
@@ -57,7 +60,7 @@ function Entry() {
 
       <div className="relative z-10 mx-auto grid min-h-screen max-w-7xl items-center px-4 py-12 sm:px-6">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <div className="glass shadow-glass rounded-3xl border border-glass-border p-8 sm:p-10">
+          <div className="glass shadow-soft rounded-2xl border border-glass-border p-8 sm:p-10">
             <div className="flex items-center gap-2.5">
               <span className="gradient-brand grid size-9 place-items-center rounded-xl font-display font-bold text-primary-foreground">
                 S
@@ -90,6 +93,7 @@ function Entry() {
 
               <Link
                 to="/author"
+                onClick={() => clearViewOnly()}
                 className="glass flex items-center gap-2 rounded-xl border border-glass-border px-6 py-3.5 text-sm font-semibold transition-colors hover:text-primary"
               >
                 <ShieldCheck className="size-4" />
@@ -98,7 +102,7 @@ function Entry() {
             </div>
           </div>
 
-          <div className="glass shadow-glass rounded-3xl border border-glass-border p-7">
+          <div className="glass shadow-soft rounded-2xl border border-glass-border p-7">
             <div className="flex items-center justify-between">
               <h2 className="font-display text-lg font-semibold">Inside the library</h2>
               <span className="text-xs font-medium text-muted-foreground">Live</span>

@@ -4,12 +4,15 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authorLogout, getAuthorStatus } from "@/lib/portal.functions";
 import { cn } from "@/lib/utils";
+import { useViewOnly } from "@/lib/view-mode";
 
 export function useAuthorStatus() {
+  const viewOnly = useViewOnly();
   return useQuery({
     queryKey: ["author-status"],
     queryFn: () => getAuthorStatus(),
     staleTime: 10_000,
+    enabled: !viewOnly,
   });
 }
 
@@ -17,24 +20,17 @@ export function AmbientBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden">
       <div
-        className="animate-float-slow absolute -left-24 -top-32 size-[420px] rounded-full opacity-70"
+        className="animate-float-slow absolute -left-32 -top-40 size-[520px] rounded-full opacity-40"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--sky) 35%, transparent), transparent 70%)",
+            "radial-gradient(circle, color-mix(in oklab, var(--sky) 18%, transparent), transparent 70%)",
         }}
       />
       <div
-        className="absolute right-0 top-10 size-[460px] rounded-full opacity-70"
+        className="absolute -right-24 top-24 size-[520px] rounded-full opacity-35"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--violet) 28%, transparent), transparent 70%)",
-        }}
-      />
-      <div
-        className="animate-float-slow absolute bottom-0 left-1/3 size-[380px] rounded-full opacity-70"
-        style={{
-          background:
-            "radial-gradient(circle, color-mix(in oklab, var(--cyan) 28%, transparent), transparent 70%)",
+            "radial-gradient(circle, color-mix(in oklab, var(--violet) 15%, transparent), transparent 70%)",
         }}
       />
     </div>
@@ -44,7 +40,9 @@ export function AmbientBackdrop() {
 export function PortalShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { data: status } = useAuthorStatus();
+  const viewOnly = useViewOnly();
+  const { data: status, isFetched } = useAuthorStatus();
+  const showAuthorNav = !viewOnly && isFetched && status?.isAuthor === true;
   const search = useRouterState({ select: (s) => s.location.search }) as { q?: string };
   const [term, setTerm] = useState(search.q ?? "");
 
@@ -68,13 +66,13 @@ export function PortalShell({ children }: { children: ReactNode }) {
     <div className="relative min-h-screen font-body text-foreground">
       <AmbientBackdrop />
 
-      <header className="relative z-20 px-4 pt-4 sm:px-6 sm:pt-6">
-        <div className="glass-strong shadow-soft mx-auto flex max-w-7xl flex-wrap items-center gap-3 rounded-2xl border border-glass-border px-3 py-3 sm:px-5">
+      <header className="sticky top-0 z-20 px-3 pt-3 sm:px-6 sm:pt-5">
+        <div className="glass-strong shadow-soft mx-auto flex max-w-7xl flex-wrap items-center gap-2.5 rounded-2xl border border-glass-border px-3 py-2.5 sm:gap-4 sm:px-4">
           <Link to="/" className="flex shrink-0 items-center gap-2.5">
-            <span className="gradient-brand grid size-9 place-items-center rounded-xl font-display font-bold text-primary-foreground">
+            <span className="gradient-brand grid size-8 place-items-center rounded-lg font-display text-sm font-bold text-primary-foreground">
               S
             </span>
-            <span className="font-display text-lg font-semibold tracking-tight">Syllable</span>
+            <span className="font-display text-[17px] font-semibold tracking-tight">Syllable</span>
           </Link>
 
           <form
@@ -84,7 +82,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
               navigate({ to: "/search", search: { q: term } });
             }}
           >
-            <label className="glass flex items-center gap-3 rounded-xl border border-glass-border px-4 py-2.5 focus-within:ring-2 focus-within:ring-ring/40">
+            <label className="flex items-center gap-2.5 rounded-full border border-glass-border bg-secondary px-4 py-2 transition-shadow focus-within:ring-2 focus-within:ring-ring/30">
               <Search className="size-4 text-muted-foreground" />
               <input
                 value={term}
@@ -99,23 +97,23 @@ export function PortalShell({ children }: { children: ReactNode }) {
           <nav className="order-2 ml-auto flex items-center gap-2 sm:order-3">
             <Link
               to="/library"
-              className="hidden items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:flex"
+              className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:flex"
             >
               <Library className="size-4" />
               Library
             </Link>
-            {status?.isAuthor ? (
+            {showAuthorNav ? (
               <>
                 <Link
                   to="/author/dashboard"
-                  className="gradient-brand rounded-lg px-3.5 py-2 text-sm font-semibold text-primary-foreground"
+                  className="gradient-brand shadow-soft rounded-full px-4 py-2 text-sm font-semibold text-primary-foreground"
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={() => logout.mutate()}
                   aria-label="Leave author mode"
-                  className="glass grid size-9 place-items-center rounded-lg border border-glass-border text-muted-foreground transition-colors hover:text-foreground"
+                  className="grid size-9 place-items-center rounded-full border border-glass-border bg-secondary text-muted-foreground transition-colors hover:text-foreground"
                 >
                   <LogOut className="size-4" />
                 </button>
@@ -123,7 +121,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
             ) : (
               <Link
                 to="/author"
-                className="glass flex items-center gap-1.5 rounded-lg border border-glass-border px-3.5 py-2 text-sm font-semibold transition-colors hover:text-primary"
+                className="flex items-center gap-1.5 rounded-full border border-glass-border bg-secondary px-4 py-2 text-sm font-semibold transition-colors hover:text-primary"
               >
                 <ShieldCheck className="size-4" />
                 Author
@@ -167,7 +165,7 @@ export function GlassPanel({
   return (
     <div
       className={cn(
-        "glass shadow-glass rounded-3xl border border-glass-border p-6 sm:p-7",
+        "glass shadow-soft rounded-2xl border border-glass-border p-6 sm:p-8",
         className,
       )}
     >
@@ -186,7 +184,7 @@ export function EmptyState({
   icon: typeof Search;
 }) {
   return (
-    <div className="glass flex flex-col items-center rounded-3xl border border-glass-border px-6 py-14 text-center">
+    <div className="glass shadow-soft flex flex-col items-center rounded-2xl border border-glass-border px-6 py-16 text-center">
       <span className="gradient-cool grid size-12 place-items-center rounded-2xl text-primary-foreground">
         <Icon className="size-5" />
       </span>
@@ -202,7 +200,7 @@ export function LoadingGrid({ count = 6 }: { count?: number }) {
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
-          className="glass h-60 animate-pulse rounded-3xl border border-glass-border"
+          className="glass h-60 animate-pulse rounded-2xl border border-glass-border"
         />
       ))}
     </div>

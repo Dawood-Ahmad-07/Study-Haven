@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { KeyRound, ShieldCheck } from "lucide-react";
 import { PortalShell, useAuthorStatus } from "@/components/portal/PortalShell";
 import { authorLogin } from "@/lib/portal.functions";
+import { clearViewOnly } from "@/lib/view-mode";
 
 export const Route = createFileRoute("/author/")({
   head: () => ({
@@ -30,6 +31,11 @@ function AuthorLogin() {
   const { data: status } = useAuthorStatus();
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+
+  // Reaching the author screen means the visitor is no longer in view-only mode.
+  useEffect(() => {
+    clearViewOnly();
+  }, []);
 
   useEffect(() => {
     if (status?.isAuthor) navigate({ to: "/author/dashboard" });
@@ -61,7 +67,7 @@ function AuthorLogin() {
   return (
     <PortalShell>
       <div className="mx-auto max-w-md">
-        <div className="glass shadow-glass rounded-3xl border border-glass-border p-8">
+        <div className="glass shadow-soft rounded-2xl border border-glass-border p-8">
           <span className="gradient-brand grid size-12 place-items-center rounded-2xl text-primary-foreground">
             <ShieldCheck className="size-5" />
           </span>

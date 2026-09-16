@@ -75,7 +75,7 @@ function SubjectPage() {
   if (isLoading) {
     return (
       <PortalShell>
-        <div className="glass h-72 animate-pulse rounded-3xl border border-glass-border" />
+        <div className="glass h-72 animate-pulse rounded-2xl border border-glass-border" />
       </PortalShell>
     );
   }
@@ -163,7 +163,7 @@ function SubjectPage() {
         Back to library
       </Link>
 
-      <div className="glass shadow-glass overflow-hidden rounded-3xl border border-glass-border">
+      <div className="glass shadow-soft overflow-hidden rounded-2xl border border-glass-border">
         {subject.cover_url ? (
           <img
             src={subject.cover_url}
@@ -222,7 +222,7 @@ function SubjectPage() {
                 {notes.map((note) => (
                   <article
                     key={note.id}
-                    className="glass shadow-glass rounded-3xl border border-glass-border p-6 sm:p-8"
+                    className="glass shadow-soft rounded-2xl border border-glass-border p-6 sm:p-8"
                   >
                     <div className="flex flex-wrap items-center gap-3">
                       {note.topic ? (
@@ -281,7 +281,7 @@ function SubjectPage() {
                     href={file.view_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="glass shadow-glass group overflow-hidden rounded-3xl border border-glass-border transition-transform hover:-translate-y-1"
+                    className="glass shadow-soft group overflow-hidden rounded-2xl border border-glass-border transition-transform hover:-translate-y-1"
                   >
                     <img
                       src={file.thumbnail_url ?? file.view_url}
@@ -324,7 +324,7 @@ function SubjectPage() {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="glass shadow-glass flex items-start gap-3 rounded-3xl border border-glass-border p-5 transition-transform hover:-translate-y-1"
+                    className="glass shadow-soft flex items-start gap-3 rounded-2xl border border-glass-border p-5 transition-transform hover:-translate-y-1"
                   >
                     <span className="gradient-cool grid size-10 shrink-0 place-items-center rounded-xl text-primary-foreground">
                       <Link2 className="size-4" />
@@ -357,7 +357,7 @@ function FileRow({ file }: { file: MaterialFile }) {
       href={file.view_url}
       target="_blank"
       rel="noopener noreferrer"
-      className="glass shadow-glass flex items-start gap-3 rounded-3xl border border-glass-border p-5 transition-transform hover:-translate-y-1"
+      className="glass shadow-soft flex items-start gap-3 rounded-2xl border border-glass-border p-5 transition-transform hover:-translate-y-1"
     >
       <span className="gradient-brand grid size-10 shrink-0 place-items-center rounded-xl text-primary-foreground">
         <FileText className="size-4" />

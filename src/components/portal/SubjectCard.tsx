@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { useState } from "react";
 import type { SubjectOverview } from "@/lib/portal-data";
 
 export function SubjectCard({
@@ -11,26 +12,29 @@ export function SubjectCard({
   counts: { notes: number; pdfs: number; images: number; links: number; total: number };
   priority?: boolean;
 }) {
+  const [coverFailed, setCoverFailed] = useState(false);
+
   return (
     <Link
       to="/subjects/$slug"
       params={{ slug: subject.slug }}
       preload="intent"
-      className="glass shadow-glass group flex flex-col overflow-hidden rounded-3xl border border-glass-border transition-transform duration-300 hover:-translate-y-1"
+      className="glass shadow-soft group flex flex-col overflow-hidden rounded-2xl border border-glass-border transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-glass"
     >
-      {subject.cover_url ? (
+      {subject.cover_url && !coverFailed ? (
         <img
           src={subject.cover_url}
+          onError={() => setCoverFailed(true)}
           alt={`${subject.name} cover`}
           width={640}
           height={320}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
           fetchPriority={priority ? "high" : "auto"}
-          className="h-40 w-full object-cover"
+          className="aspect-[16/9] w-full object-cover"
         />
       ) : (
-        <div className="gradient-cool flex h-40 w-full items-center justify-center">
+        <div className="gradient-cool flex aspect-[16/9] w-full items-center justify-center">
           <span className="font-display text-4xl font-bold text-primary-foreground/90">
             {subject.name.slice(0, 2).toUpperCase()}
           </span>
@@ -38,26 +42,34 @@ export function SubjectCard({
       )}
 
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="font-display text-xl font-semibold">{subject.name}</h3>
+        <h3 className="font-display text-lg font-semibold tracking-tight">{subject.name}</h3>
         <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
           {subject.description || "No description yet."}
         </p>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Badge tone="sky">{counts.notes} Notes</Badge>
-          <Badge tone="violet">{counts.pdfs} PDFs</Badge>
-          <Badge tone="cyan">{counts.images} Images</Badge>
-          <Badge tone="emerald">{counts.links} Links</Badge>
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          <Chip>{counts.notes} Notes</Chip>
+          <Chip>{counts.pdfs} PDFs</Chip>
+          <Chip>{counts.images} Images</Chip>
+          <Chip>{counts.links} Links</Chip>
         </div>
 
-        <div className="mt-6 flex items-center justify-between rounded-xl border border-glass-border bg-secondary px-4 py-3">
-          <span className="text-sm font-medium">
+        <div className="mt-5 flex items-center justify-between border-t border-glass-border pt-4">
+          <span className="text-sm font-medium text-muted-foreground">
             {counts.total} material{counts.total === 1 ? "" : "s"}
           </span>
           <ArrowRight className="size-4 text-primary transition-transform group-hover:translate-x-1" />
         </div>
       </div>
     </Link>
+  );
+}
+
+export function Chip({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded-full border border-glass-border bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
+      {children}
+    </span>
   );
 }
 
