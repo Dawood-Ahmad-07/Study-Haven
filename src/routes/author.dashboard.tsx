@@ -474,6 +474,70 @@ function PasswordPanel() {
 
 /* ------------------------------------------------------------------ */
 
+function StoragePanel() {
+  const health = useQuery({
+    queryKey: ["storage-health"],
+    queryFn: () => checkStorageHealth(),
+    staleTime: 60_000,
+  });
+
+  return (
+    <div className="glass shadow-glass rounded-3xl border border-glass-border p-5">
+      <div className="flex items-center gap-2">
+        <Upload className="size-4 text-primary" />
+        <h2 className="font-display text-lg font-semibold">Storage</h2>
+      </div>
+      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+        {health.isLoading
+          ? "Checking your file storage…"
+          : (health.data?.message ?? "Storage status is unavailable right now.")}
+      </p>
+      <button
+        type="button"
+        onClick={() => void health.refetch()}
+        className={`${ghostButton} mt-3 w-full`}
+      >
+        Re-check storage
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+function ActivityPanel() {
+  const log = useQuery({
+    queryKey: ["audit-log"],
+    queryFn: () => listAuditLog(),
+    staleTime: 30_000,
+  });
+
+  return (
+    <div className="glass shadow-glass rounded-3xl border border-glass-border p-5">
+      <h2 className="font-display text-lg font-semibold">Recent activity</h2>
+      <p className="mt-1 text-xs text-muted-foreground">
+        A record of author sign-ins and content changes.
+      </p>
+      <ul className="mt-3 max-h-64 space-y-2 overflow-y-auto pr-1 text-xs">
+        {(log.data ?? []).map((entry) => (
+          <li key={entry.id} className="rounded-xl border border-glass-border/70 px-3 py-2">
+            <p className="font-medium">{entry.action.replace(/_/g, " ")}</p>
+            <p className="text-muted-foreground">
+              {entry.target ? `${entry.target} — ` : ""}
+              {formatDate(entry.created_at)}
+            </p>
+          </li>
+        ))}
+        {!log.isLoading && (log.data ?? []).length === 0 ? (
+          <li className="text-muted-foreground">No activity recorded yet.</li>
+        ) : null}
+      </ul>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
 const MANAGER_TABS = [
   { id: "notes", label: "Notes", icon: NotebookPen },
   { id: "pdfs", label: "PDFs", icon: FileText },
