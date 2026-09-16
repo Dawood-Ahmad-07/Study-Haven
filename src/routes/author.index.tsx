@@ -31,6 +31,11 @@ function AuthorLogin() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
 
+  // Reaching the author screen means the visitor is no longer in view-only mode.
+  useEffect(() => {
+    clearViewOnly();
+  }, []);
+
   useEffect(() => {
     if (status?.isAuthor) navigate({ to: "/author/dashboard" });
   }, [status?.isAuthor, navigate]);
