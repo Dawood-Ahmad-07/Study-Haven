@@ -93,6 +93,7 @@ function Entry() {
 
               <Link
                 to="/author"
+                onClick={() => clearViewOnly()}
                 className="glass flex items-center gap-2 rounded-xl border border-glass-border px-6 py-3.5 text-sm font-semibold transition-colors hover:text-primary"
               >
                 <ShieldCheck className="size-4" />
