@@ -1,7 +1,17 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { BookOpenCheck, Eye, FileText, Images, Link2, ShieldCheck } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpenCheck,
+  Eye,
+  FileText,
+  Images,
+  Link2,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import { AmbientBackdrop } from "@/components/portal/PortalShell";
+import { Logo } from "@/components/portal/Logo";
 import { statsQueryOptions } from "@/lib/portal-data";
 import { authorLogout } from "@/lib/portal.functions";
 import { clearViewOnly, setViewOnly } from "@/lib/view-mode";
@@ -9,13 +19,13 @@ import { clearViewOnly, setViewOnly } from "@/lib/view-mode";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Syllable — Study Material Portal" },
+      { title: "Learnova — A calm home for your study material" },
       {
         name: "description",
         content:
-          "Browse study notes, PDFs, images and useful links by subject. Open to everyone, managed by the author.",
+          "Browse study notes, PDFs, images and useful links by subject on Learnova. Open to everyone, managed by the author.",
       },
-      { property: "og:title", content: "Syllable — Study Material Portal" },
+      { property: "og:title", content: "Learnova — A calm home for your study material" },
       {
         property: "og:description",
         content: "Browse study notes, PDFs, images and useful links by subject.",
@@ -46,7 +56,6 @@ function Entry() {
     navigate({ to: "/library" });
   }
 
-
   const stats = [
     { label: "Subjects", value: data?.subjects ?? 0, icon: BookOpenCheck },
     { label: "Notes", value: data?.notes ?? 0, icon: FileText },
@@ -58,77 +67,78 @@ function Entry() {
     <div className="relative min-h-screen font-body">
       <AmbientBackdrop />
 
-      <div className="relative z-10 mx-auto grid min-h-screen max-w-7xl items-center px-4 py-12 sm:px-6">
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <div className="glass shadow-soft rounded-2xl border border-glass-border p-8 sm:p-10">
-            <div className="flex items-center gap-2.5">
-              <span className="gradient-brand grid size-9 place-items-center rounded-xl font-display font-bold text-primary-foreground">
-                S
-              </span>
-              <span className="font-display text-lg font-semibold tracking-tight">Syllable</span>
-            </div>
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-4 py-14 text-center sm:px-6">
+        <Logo
+          markClassName="size-12"
+          wordClassName="text-2xl"
+          className="gap-3"
+        />
 
-            <p className="mt-8 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-              Welcome
-            </p>
-            <h1 className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl">
-              How do you want
-              <br />
-              to enter today?
-            </h1>
-            <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-muted-foreground">
-              Browse the full study library with no sign-up at all, or unlock author mode with your
-              password to manage every subject, note and file.
-            </p>
+        <h1 className="mt-8 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl">
+          A calm home for your
+          <br />
+          <span className="text-gradient-brand">study material</span>
+        </h1>
+        <p className="mt-4 max-w-md text-[15px] leading-relaxed text-muted-foreground">
+          Notes, PDFs, images and useful links — organised subject by subject. Viewing is open to
+          everyone, with no account needed.
+        </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => void enterViewOnly()}
-                className="gradient-brand shadow-soft flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold text-primary-foreground"
-              >
-                <Eye className="size-4" />
-                Only View
-              </button>
+        <div className="mt-10 grid w-full gap-4 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => void enterViewOnly()}
+            className="glass shadow-soft group flex flex-col items-start gap-3 rounded-2xl border border-glass-border p-6 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-glass"
+          >
+            <span className="gradient-brand grid size-11 place-items-center rounded-xl text-primary-foreground">
+              <Eye className="size-5" />
+            </span>
+            <span className="font-display text-lg font-semibold tracking-tight">Only View</span>
+            <span className="text-sm leading-relaxed text-muted-foreground">
+              Enter straight away and browse everything. No sign-up, nothing to fill in.
+            </span>
+            <span className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-primary">
+              Open the library
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            </span>
+          </button>
 
-              <Link
-                to="/author"
-                onClick={() => clearViewOnly()}
-                className="glass flex items-center gap-2 rounded-xl border border-glass-border px-6 py-3.5 text-sm font-semibold transition-colors hover:text-primary"
-              >
-                <ShieldCheck className="size-4" />
-                Author
-              </Link>
-            </div>
-          </div>
-
-          <div className="glass shadow-soft rounded-2xl border border-glass-border p-7">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display text-lg font-semibold">Inside the library</h2>
-              <span className="text-xs font-medium text-muted-foreground">Live</span>
-            </div>
-
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-2xl border border-glass-border bg-secondary p-4"
-                >
-                  <stat.icon className="size-4 text-primary" />
-                  <p className="mt-3 font-display text-2xl font-bold">{stat.value}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-5 rounded-2xl border border-glass-border bg-secondary p-4">
-              <p className="text-sm font-semibold">Viewing is completely open</p>
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                No account, no sign-up. Only the author can add, edit or remove material.
-              </p>
-            </div>
-          </div>
+          <Link
+            to="/author"
+            onClick={() => clearViewOnly()}
+            className="glass shadow-soft group flex flex-col items-start gap-3 rounded-2xl border border-glass-border p-6 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-glass"
+          >
+            <span className="grid size-11 place-items-center rounded-xl border border-glass-border bg-secondary text-accent">
+              <ShieldCheck className="size-5" />
+            </span>
+            <span className="font-display text-lg font-semibold tracking-tight">Author</span>
+            <span className="text-sm leading-relaxed text-muted-foreground">
+              Password protected. Add, edit and remove subjects, notes, files and links.
+            </span>
+            <span className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-accent">
+              Enter password
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            </span>
+          </Link>
         </div>
+
+        <div className="glass shadow-soft mt-10 grid w-full grid-cols-2 gap-px overflow-hidden rounded-2xl border border-glass-border sm:grid-cols-4">
+          {stats.map((stat) => (
+            <div key={stat.label} className="px-4 py-5">
+              <stat.icon className="mx-auto size-4 text-primary" aria-hidden />
+              <p className="mt-2.5 font-display text-2xl font-bold tabular-nums">{stat.value}</p>
+              <p className="eyebrow mt-1">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-8 flex items-center gap-2 text-xs text-muted-foreground">
+          <Sparkles className="size-3.5 text-primary" aria-hidden />
+          Crafted with care — developed by{" "}
+          <span className="font-display font-semibold tracking-tight text-gradient-brand">
+            Dawood Ahmad
+          </span>
+        </p>
       </div>
     </div>
   );

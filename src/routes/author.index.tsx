@@ -5,16 +5,17 @@ import { KeyRound, ShieldCheck } from "lucide-react";
 import { PortalShell, useAuthorStatus } from "@/components/portal/PortalShell";
 import { authorLogin } from "@/lib/portal.functions";
 import { clearViewOnly } from "@/lib/view-mode";
+import { LogoMark } from "@/components/portal/Logo";
 
 export const Route = createFileRoute("/author/")({
   head: () => ({
     meta: [
-      { title: "Author access — Syllable Study Portal" },
+      { title: "Author access — Learnova" },
       {
         name: "description",
         content: "Enter the author password to manage subjects, notes, files and links.",
       },
-      { property: "og:title", content: "Author access — Syllable Study Portal" },
+      { property: "og:title", content: "Author access — Learnova" },
       {
         property: "og:description",
         content: "Enter the author password to manage the study portal.",
@@ -68,10 +69,14 @@ function AuthorLogin() {
     <PortalShell>
       <div className="mx-auto max-w-md">
         <div className="glass shadow-soft rounded-2xl border border-glass-border p-8">
-          <span className="gradient-brand grid size-12 place-items-center rounded-2xl text-primary-foreground">
-            <ShieldCheck className="size-5" />
-          </span>
-          <h1 className="mt-5 font-display text-2xl font-bold tracking-tight">Author access</h1>
+          <div className="flex items-center gap-3">
+            <span className="gradient-brand grid size-12 place-items-center rounded-2xl text-primary-foreground">
+              <ShieldCheck className="size-5" />
+            </span>
+            <LogoMark className="size-9 opacity-70" />
+          </div>
+          <p className="eyebrow mt-5">Learnova</p>
+          <h1 className="mt-2 font-display text-2xl font-bold tracking-tight">Author access</h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             Enter your author password to manage the portal. Visitors never need this — browsing
             stays open to everyone.
