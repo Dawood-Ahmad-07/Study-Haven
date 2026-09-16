@@ -4,6 +4,7 @@ import { BookOpenCheck, Eye, FileText, Images, Link2, ShieldCheck } from "lucide
 import { AmbientBackdrop } from "@/components/portal/PortalShell";
 import { statsQueryOptions } from "@/lib/portal-data";
 import { authorLogout } from "@/lib/portal.functions";
+import { clearViewOnly, setViewOnly } from "@/lib/view-mode";
 
 export const Route = createFileRoute("/")({
   head: () => ({
