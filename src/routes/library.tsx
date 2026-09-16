@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { BookOpenCheck, TriangleAlert } from "lucide-react";
-import { EmptyState, LoadingGrid, PortalShell } from "@/components/portal/PortalShell";
+import { EmptyState, PortalShell } from "@/components/portal/PortalShell";
 import { SubjectCard } from "@/components/portal/SubjectCard";
 import { countsOf, subjectsQueryOptions } from "@/lib/portal-data";
 
