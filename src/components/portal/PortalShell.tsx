@@ -6,10 +6,12 @@ import { authorLogout, getAuthorStatus } from "@/lib/portal.functions";
 import { cn } from "@/lib/utils";
 
 export function useAuthorStatus() {
+  const viewOnly = useViewOnly();
   return useQuery({
     queryKey: ["author-status"],
     queryFn: () => getAuthorStatus(),
     staleTime: 10_000,
+    enabled: !viewOnly,
   });
 }
 
