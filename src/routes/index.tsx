@@ -1,8 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { BookOpenCheck, Eye, FileText, Images, Link2, ShieldCheck } from "lucide-react";
 import { AmbientBackdrop } from "@/components/portal/PortalShell";
 import { portalQueryOptions } from "@/lib/portal-data";
+import { authorLogout } from "@/lib/portal.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,6 +26,23 @@ export const Route = createFileRoute("/")({
 
 function Entry() {
   const { data } = useQuery(portalQueryOptions);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  // "Only View" always enters as a plain visitor: any leftover author session
+  // from an earlier sign-in on this device is ended first.
+  async function enterViewOnly() {
+    const { clearAuthorToken } = await import("@/lib/author-token");
+    clearAuthorToken();
+    try {
+      await authorLogout();
+    } catch {
+      /* viewing must work even if the sign-out call fails */
+    }
+    await queryClient.invalidateQueries({ queryKey: ["author-status"] });
+    navigate({ to: "/library" });
+  }
+
 
   const stats = [
     { label: "Subjects", value: data?.subjects.length ?? 0, icon: BookOpenCheck },
@@ -65,13 +83,15 @@ function Entry() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/library"
+              <button
+                type="button"
+                onClick={() => void enterViewOnly()}
                 className="gradient-brand shadow-soft flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold text-primary-foreground"
               >
                 <Eye className="size-4" />
                 Only View
-              </Link>
+              </button>
+
               <Link
                 to="/author"
                 className="glass flex items-center gap-2 rounded-xl border border-glass-border px-6 py-3.5 text-sm font-semibold transition-colors hover:text-primary"
