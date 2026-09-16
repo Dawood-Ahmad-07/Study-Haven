@@ -61,10 +61,11 @@ function SearchPage() {
 
   return (
     <PortalShell>
-      <h1 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
+      <p className="eyebrow">Search</p>
+      <h1 className="mt-2 font-display text-2xl font-bold tracking-tight sm:text-3xl">
         Results for “{q}”
       </h1>
-      <p className="mt-1 text-sm text-muted-foreground">
+      <p className="mt-1.5 text-sm text-muted-foreground">
         {total} match{total === 1 ? "" : "es"} across the library
       </p>
 
@@ -151,7 +152,7 @@ function ResultRow({
       to="/subjects/$slug"
       params={{ slug: to }}
       preload="intent"
-      className="glass shadow-soft flex items-start gap-4 rounded-2xl border border-glass-border p-5 transition-transform hover:-translate-y-1"
+      className="glass shadow-soft flex items-start gap-4 rounded-2xl border border-glass-border p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-glass"
     >
       <span className="gradient-cool grid size-10 shrink-0 place-items-center rounded-xl text-primary-foreground">
         {icon}

@@ -68,10 +68,14 @@ function AuthorLogin() {
     <PortalShell>
       <div className="mx-auto max-w-md">
         <div className="glass shadow-soft rounded-2xl border border-glass-border p-8">
-          <span className="gradient-brand grid size-12 place-items-center rounded-2xl text-primary-foreground">
-            <ShieldCheck className="size-5" />
-          </span>
-          <h1 className="mt-5 font-display text-2xl font-bold tracking-tight">Author access</h1>
+          <div className="flex items-center gap-3">
+            <span className="gradient-brand grid size-12 place-items-center rounded-2xl text-primary-foreground">
+              <ShieldCheck className="size-5" />
+            </span>
+            <LogoMark className="size-9 opacity-70" />
+          </div>
+          <p className="eyebrow mt-5">Learnova</p>
+          <h1 className="mt-2 font-display text-2xl font-bold tracking-tight">Author access</h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             Enter your author password to manage the portal. Visitors never need this — browsing
             stays open to everyone.

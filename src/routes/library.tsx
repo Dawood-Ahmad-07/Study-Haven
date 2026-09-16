@@ -30,13 +30,14 @@ function LibraryPage() {
 
   return (
     <PortalShell>
-      <div className="mb-6 flex items-end justify-between gap-4">
+      <div className="mb-7 flex items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
+          <p className="eyebrow">Library</p>
+          <h1 className="mt-2 font-display text-2xl font-bold tracking-tight sm:text-3xl">
             Explore subjects
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Pick a subject to open its study hub.
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            Pick a subject to open its notes, PDFs, images and links.
           </p>
         </div>
         {data ? (
