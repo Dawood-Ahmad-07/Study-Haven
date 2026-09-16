@@ -25,6 +25,7 @@ import {
 } from "@/lib/portal-data";
 import { countsFor, portalQueryOptions } from "@/lib/author-data";
 import { MAX_UPLOAD_BYTES, fileToBase64 } from "@/lib/file-input";
+import { clearAuthorToken, setAuthorToken } from "@/lib/author-token";
 import {
   changeAuthorPassword,
   deleteLink,
