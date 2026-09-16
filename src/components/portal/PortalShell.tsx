@@ -109,7 +109,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
               <Library className="size-4" />
               Library
             </Link>
-            {status?.isAuthor ? (
+            {showAuthorNav ? (
               <>
                 <Link
                   to="/author/dashboard"
