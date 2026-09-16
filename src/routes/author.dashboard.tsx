@@ -26,6 +26,7 @@ import {
 import { countsFor, portalQueryOptions } from "@/lib/author-data";
 import { MAX_UPLOAD_BYTES, fileToBase64 } from "@/lib/file-input";
 import { clearAuthorToken, setAuthorToken } from "@/lib/author-token";
+import { useViewOnly } from "@/lib/view-mode";
 import {
   changeAuthorPassword,
   checkStorageHealth,
