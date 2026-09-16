@@ -22,7 +22,7 @@ import { getSubjectSection, PAGE_SIZE } from "@/lib/public.functions";
 
 export const Route = createFileRoute("/subjects/$slug")({
   head: ({ params }) => {
-    const title = `${params.slug.replace(/-/g, " ")} — Learnova`;
+    const title = `${params.slug.replace(/-/g, " ")} — Syllable Study Portal`;
     return {
       meta: [
         { title },
@@ -178,8 +178,7 @@ function SubjectPage() {
           <div className="gradient-cool h-32 w-full sm:h-40" />
         )}
         <div className="p-6 sm:p-8">
-          <p className="eyebrow">Subject</p>
-          <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">{subject.name}</h1>
+          <h1 className="font-display text-3xl font-bold tracking-tight">{subject.name}</h1>
           {subject.description ? (
             <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
               {subject.description}

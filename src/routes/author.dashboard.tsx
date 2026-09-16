@@ -47,9 +47,9 @@ import {
 export const Route = createFileRoute("/author/dashboard")({
   head: () => ({
     meta: [
-      { title: "Author dashboard — Learnova" },
+      { title: "Author dashboard — Syllable Study Portal" },
       { name: "description", content: "Manage subjects, notes, PDFs, images and links." },
-      { property: "og:title", content: "Author dashboard — Learnova" },
+      { property: "og:title", content: "Author dashboard — Syllable Study Portal" },
       { property: "og:description", content: "Manage the study portal content." },
       { name: "robots", content: "noindex" },
     ],
