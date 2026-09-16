@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Library, LogOut, Search, ShieldCheck } from "lucide-react";
+import { Library, LogOut, Search, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authorLogout, getAuthorStatus } from "@/lib/portal.functions";
