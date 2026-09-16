@@ -83,13 +83,15 @@ function Entry() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/library"
+              <button
+                type="button"
+                onClick={() => void enterViewOnly()}
                 className="gradient-brand shadow-soft flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold text-primary-foreground"
               >
                 <Eye className="size-4" />
                 Only View
-              </Link>
+              </button>
+
               <Link
                 to="/author"
                 className="glass flex items-center gap-2 rounded-xl border border-glass-border px-6 py-3.5 text-sm font-semibold transition-colors hover:text-primary"
