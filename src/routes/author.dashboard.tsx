@@ -384,14 +384,17 @@ function SubjectForm({ subject, onDone }: { subject?: Subject; onDone: () => voi
 function PasswordPanel() {
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
+  const [ownerKey, setOwnerKey] = useState("");
 
   const change = useMutation({
-    mutationFn: () => changeAuthorPassword({ data: { current, next } }),
+    mutationFn: () => changeAuthorPassword({ data: { current, next, ownerKey } }),
     onSuccess: (result) => {
       if (result.ok) {
         toast.success(result.message);
         setCurrent("");
         setNext("");
+        setOwnerKey("");
+        if (result.token) setAuthorToken(result.token);
       } else {
         toast.error(result.message);
       }
@@ -406,7 +409,7 @@ function PasswordPanel() {
         <h2 className="font-display text-lg font-semibold">Author password</h2>
       </div>
       <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-        Change it any time. Only you can do this, and it is stored one-way encrypted.
+        Only the owner can change this: it needs the current password plus your private owner key.
       </p>
       <form
         className="mt-4 space-y-3"
