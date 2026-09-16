@@ -9,12 +9,12 @@ import { clearViewOnly } from "@/lib/view-mode";
 export const Route = createFileRoute("/author/")({
   head: () => ({
     meta: [
-      { title: "Author access — Syllable Study Portal" },
+      { title: "Author access — Learnova" },
       {
         name: "description",
         content: "Enter the author password to manage subjects, notes, files and links.",
       },
-      { property: "og:title", content: "Author access — Syllable Study Portal" },
+      { property: "og:title", content: "Author access — Learnova" },
       {
         property: "og:description",
         content: "Enter the author password to manage the study portal.",

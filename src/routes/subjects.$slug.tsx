@@ -22,7 +22,7 @@ import { getSubjectSection, PAGE_SIZE } from "@/lib/public.functions";
 
 export const Route = createFileRoute("/subjects/$slug")({
   head: ({ params }) => {
-    const title = `${params.slug.replace(/-/g, " ")} — Syllable Study Portal`;
+    const title = `${params.slug.replace(/-/g, " ")} — Learnova`;
     return {
       meta: [
         { title },

@@ -72,7 +72,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
             <span className="gradient-brand grid size-8 place-items-center rounded-lg font-display text-sm font-bold text-primary-foreground">
               S
             </span>
-            <span className="font-display text-[17px] font-semibold tracking-tight">Syllable</span>
+            <span className="font-display text-[17px] font-semibold tracking-tight">Learnova</span>
           </Link>
 
           <form
@@ -147,7 +147,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
             </span>
           </div>
           <p className="text-center text-xs text-muted-foreground/70">
-            Syllable — a study material portal. Viewing is open to everyone.
+            Learnova — a study material portal. Viewing is open to everyone.
           </p>
         </div>
       </footer>

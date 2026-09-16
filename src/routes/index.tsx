@@ -9,13 +9,13 @@ import { clearViewOnly, setViewOnly } from "@/lib/view-mode";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Syllable — Study Material Portal" },
+      { title: "Learnova — Study Material Portal" },
       {
         name: "description",
         content:
           "Browse study notes, PDFs, images and useful links by subject. Open to everyone, managed by the author.",
       },
-      { property: "og:title", content: "Syllable — Study Material Portal" },
+      { property: "og:title", content: "Learnova — Study Material Portal" },
       {
         property: "og:description",
         content: "Browse study notes, PDFs, images and useful links by subject.",
@@ -65,7 +65,7 @@ function Entry() {
               <span className="gradient-brand grid size-9 place-items-center rounded-xl font-display font-bold text-primary-foreground">
                 S
               </span>
-              <span className="font-display text-lg font-semibold tracking-tight">Syllable</span>
+              <span className="font-display text-lg font-semibold tracking-tight">Learnova</span>
             </div>
 
             <p className="mt-8 text-xs font-semibold uppercase tracking-[0.22em] text-primary">

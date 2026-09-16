@@ -8,12 +8,12 @@ import { countsOf, subjectsQueryOptions } from "@/lib/portal-data";
 export const Route = createFileRoute("/library")({
   head: () => ({
     meta: [
-      { title: "Library — Syllable Study Portal" },
+      { title: "Library — Learnova" },
       {
         name: "description",
         content: "Every subject in the study library, with its notes, PDFs, images and links.",
       },
-      { property: "og:title", content: "Library — Syllable Study Portal" },
+      { property: "og:title", content: "Library — Learnova" },
       {
         property: "og:description",
         content: "Every subject in the study library, with its notes, PDFs, images and links.",

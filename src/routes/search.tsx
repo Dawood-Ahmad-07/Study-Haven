@@ -12,12 +12,12 @@ export const Route = createFileRoute("/search")({
   }),
   head: () => ({
     meta: [
-      { title: "Search — Syllable Study Portal" },
+      { title: "Search — Learnova" },
       {
         name: "description",
         content: "Search across every subject, note, PDF, image and useful link in the portal.",
       },
-      { property: "og:title", content: "Search — Syllable Study Portal" },
+      { property: "og:title", content: "Search — Learnova" },
       {
         property: "og:description",
         content: "Search across every subject, note, PDF, image and useful link in the portal.",
