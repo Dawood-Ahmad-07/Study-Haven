@@ -76,7 +76,7 @@ function Dashboard() {
     }
   }, [data, activeSubjectId]);
 
-  if (statusLoading || isLoading || !data) {
+  if (!statusFetched || (authorised && (isLoading || !data))) {
     return (
       <PortalShell>
         <div className="glass h-72 animate-pulse rounded-3xl border border-glass-border" />
@@ -84,7 +84,7 @@ function Dashboard() {
     );
   }
 
-  if (!status?.isAuthor) {
+  if (!authorised || !data) {
     return (
       <PortalShell>
         <div className="glass rounded-3xl border border-glass-border p-8 text-center">
