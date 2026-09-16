@@ -60,13 +60,15 @@ export const Route = createFileRoute("/author/dashboard")({
 
 function Dashboard() {
   const navigate = useNavigate();
-  const { data: status, isLoading: statusLoading } = useAuthorStatus();
-  const { data, isLoading } = useQuery(portalQueryOptions);
+  const viewOnly = useViewOnly();
+  const { data: status, isFetched: statusFetched } = useAuthorStatus();
+  const authorised = !viewOnly && statusFetched && status?.isAuthor === true;
+  const { data, isLoading } = useQuery({ ...portalQueryOptions, enabled: authorised });
   const [activeSubjectId, setActiveSubjectId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!statusLoading && status && !status.isAuthor) navigate({ to: "/author" });
-  }, [status, statusLoading, navigate]);
+    if (viewOnly || (statusFetched && !status?.isAuthor)) navigate({ to: "/author" });
+  }, [viewOnly, status, statusFetched, navigate]);
 
   useEffect(() => {
     if (data && data.subjects.length > 0 && !activeSubjectId) {
