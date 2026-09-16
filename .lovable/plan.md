@@ -1,35 +1,48 @@
-# Speed and Security Upgrades
+# Speed, Scale and Security Upgrades
 
-Improvements that make the study portal noticeably faster and harder to abuse, without changing how it looks or how you use it.
+Make the study portal fast and stable for the long run — smooth with 100, 500 or more visitors at once — and lock editing to the Author alone, with the password changeable only by you.
 
-## Speed
+## Speed and scale
 
-1. **Load only what a page needs.** Right now every page (home, library, a subject, search) downloads the entire library — all subjects, all notes, all PDFs, all images, all links — even to show one subject. This gets slower with every item you add. Split it into per-page fetches: library gets subjects plus counts, a subject page gets only that subject's material.
-2. **Render pages on the server.** Public pages currently show a loading state first, then fetch. Move the initial read into the route so the first screen arrives already filled — faster feel and better for Google.
-3. **Server-side search.** Search currently downloads everything and filters in the browser. Move matching to the database with a debounced query so results stay instant as content grows.
-4. **Faster images.** Cover images and study images get lazy loading, width/height hints (no layout jump), and async decoding; the first visible cover is prioritised.
-5. **Prefetch on hover.** Hovering a subject card quietly warms its page, so the click feels instant.
+1. **Load only what a page needs.** Today every page downloads the whole library (all subjects, notes, PDFs, images, links), even to show one subject. Split into per-page fetches: library gets subjects plus counts, a subject page gets only its own material.
+2. **Render pages on the server.** Public pages currently flash a loading state, then fetch. Move the first read into the route so the page arrives filled — faster feel and better for Google.
+3. **Server-side search.** Search downloads everything and filters in the browser. Move matching into the database with a debounced query and a result limit.
+4. **Paging for large subjects.** Notes, PDFs, images and links load in pages of about 24 with "load more", so a subject with hundreds of items still opens instantly.
+5. **Caching for many visitors at once.** Public pages get short-lived shared caching, so a spike of 500 readers is largely served from cache instead of hitting the database repeatedly.
+6. **Database indexes.** Indexes on subject slug, subject_id, and the searched text columns keep queries fast as content grows.
+7. **Faster images.** Lazy loading, width/height hints (no layout jump), async decoding, and priority for the first visible cover.
+8. **Prefetch on hover.** Hovering a subject card warms its page so the click feels instant.
 
-## Security
+## Editing access — Author only
 
-1. **Login rate limiting.** Author password attempts are currently unlimited. Add a per-IP limit (for example 5 failed attempts, then a cooling-off period) recorded in the database, with a clear "try again in a moment" message.
-2. **Session revocation.** The signed author token is valid for 14 days and cannot be cancelled early. Add a stored session version so "Log out everywhere" and any password change instantly invalidate old tokens.
-3. **Shorter session + renewal.** Reduce token life to about 3 days with silent renewal while you are active, so a stolen token expires quickly.
-4. **Stricter input checks.** Validate every author action with a schema (lengths, allowed file types, URL scheme) instead of light manual checks; block non-PDF/image uploads and oversize files before they reach Drive.
-5. **Security headers.** Add Content-Security-Policy, X-Frame-Options-style framing rules, Referrer-Policy, and nosniff to responses to reduce injection and clickjacking risk.
-6. **Safe link handling.** External links get `rel="noopener noreferrer"` and only http/https are accepted.
-7. **Audit trail.** A small log of author actions (login, create, edit, delete) visible in the dashboard, so you can see if anything unexpected happened.
+1. **Owner-only password change.** The password change form requires your current password **plus** a private Owner Key stored as a secret that only you hold. Anyone with just the Author password can manage content but cannot change the password. You can rotate the Owner Key at any time.
+2. **Login rate limiting.** Author login attempts are unlimited today. Add a per-IP limit (for example 5 failures, then a cooling-off window) with a clear "try again shortly" message.
+3. **Session revocation.** The signed author token currently lasts 14 days and cannot be cancelled. Add a stored session version so "Log out everywhere" and any password change instantly kill old tokens.
+4. **Shorter session with renewal.** Token life drops to about 3 days with silent renewal while you are active.
+5. **Stricter validation.** Every author action gets schema validation (lengths, allowed file types, URL scheme); non-PDF/image or oversize uploads are rejected before reaching Drive.
+6. **Security headers.** Content-Security-Policy, framing protection, Referrer-Policy and nosniff on responses.
+7. **Safe external links.** `rel="noopener noreferrer"` everywhere, only http/https accepted.
+8. **Audit trail.** A dashboard list of author actions (login, create, edit, delete, password change) so nothing happens unnoticed.
+
+## Reliability for the long run
+
+- Friendly error and retry states on every page instead of blank screens.
+- Upload failures roll back cleanly (no orphan records if Drive fails).
+- Health check on the storage connection surfaced in the dashboard, so an expired Google Drive connection is visible before uploads break.
 
 ## Technical notes
 
-- New query options per surface (`subjectsQueryOptions`, `subjectDetailQueryOptions(slug)`, `searchQueryOptions(q)`) replacing the single `portalQueryOptions`; route loaders use `ensureQueryData` and components use `useSuspenseQuery`.
-- Counts come from a SQL view or aggregate select rather than client-side `countsFor` over full tables.
-- Search runs as a public server function using the publishable-key client with `ilike`/`websearch_to_tsquery`, limited and column-projected.
-- Rate limiting: `author_login_attempts` table (ip hash, attempts, window start) written with the service-role client; no public policy.
-- Token revocation: `session_version` column on `portal_settings`, included in the HMAC payload and checked in `verifyAuthorToken`.
-- Validation with zod in each `inputValidator`; upload guard on MIME type and byte size before `uploadToDrive`.
-- Headers added in the server request middleware in `src/start.ts`.
+- Split `portalQueryOptions` into `subjectsQueryOptions`, `subjectDetailQueryOptions(slug)`, `searchQueryOptions(q)`; route loaders call `ensureQueryData`, components use `useSuspenseQuery`.
+- Counts from a SQL view / aggregate instead of client-side `countsFor` over full tables.
+- Public reads through a server publishable-key client with column projection, `range()` paging, and `Cache-Control: public, s-maxage=60, stale-while-revalidate`.
+- Search via `ilike` / `websearch_to_tsquery` with `limit`; add `pg_trgm` or tsvector indexes plus btree indexes on `subjects.slug` and every `subject_id`.
+- Rate limiting: `author_login_attempts` table (hashed IP, attempt count, window start), service-role writes only, no public policy.
+- Revocation: `session_version` on `portal_settings`, folded into the HMAC payload and checked in `verifyAuthorToken`.
+- Owner key: new `AUTHOR_OWNER_KEY` secret; `changeAuthorPassword` requires current password + owner key, compared with a timing-safe check.
+- Audit: `author_audit_log` table (action, target, ip hash, created_at), service-role only, read through an author-guarded server function.
+- Zod validation in each `inputValidator`; MIME/size guard before `uploadToDrive`.
+- Security headers added in the request middleware in `src/start.ts`.
 
 ## Scope
 
-No visual redesign, no new user accounts, no paid services — everything stays on the current free stack.
+No visual redesign, no visitor accounts, no paid services — everything stays on the current free stack.
