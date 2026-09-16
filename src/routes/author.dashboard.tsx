@@ -452,6 +452,22 @@ function PasswordPanel() {
           {change.isPending ? "Updating…" : "Update password"}
         </button>
       </form>
+
+      <button
+        type="button"
+        onClick={() => {
+          if (!confirm("Sign out of every device that is currently in author mode?")) return;
+          void logoutEverywhere()
+            .then(() => {
+              clearAuthorToken();
+              window.location.href = "/author";
+            })
+            .catch((error: Error) => toast.error(error.message));
+        }}
+        className={`${ghostButton} mt-3 w-full`}
+      >
+        Log out everywhere
+      </button>
     </div>
   );
 }
