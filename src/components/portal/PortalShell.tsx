@@ -20,24 +20,17 @@ export function AmbientBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden">
       <div
-        className="animate-float-slow absolute -left-24 -top-32 size-[420px] rounded-full opacity-70"
+        className="animate-float-slow absolute -left-32 -top-40 size-[520px] rounded-full opacity-40"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--sky) 35%, transparent), transparent 70%)",
+            "radial-gradient(circle, color-mix(in oklab, var(--sky) 18%, transparent), transparent 70%)",
         }}
       />
       <div
-        className="absolute right-0 top-10 size-[460px] rounded-full opacity-70"
+        className="absolute -right-24 top-24 size-[520px] rounded-full opacity-35"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--violet) 28%, transparent), transparent 70%)",
-        }}
-      />
-      <div
-        className="animate-float-slow absolute bottom-0 left-1/3 size-[380px] rounded-full opacity-70"
-        style={{
-          background:
-            "radial-gradient(circle, color-mix(in oklab, var(--cyan) 28%, transparent), transparent 70%)",
+            "radial-gradient(circle, color-mix(in oklab, var(--violet) 15%, transparent), transparent 70%)",
         }}
       />
     </div>
