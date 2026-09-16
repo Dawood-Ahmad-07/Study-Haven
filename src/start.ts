@@ -18,6 +18,20 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   }
 });
 
+// Baseline hardening headers on every response.
+const securityHeaders = createMiddleware().server(async ({ next }) => {
+  const response = await next();
+  const headers = (response as unknown as { headers?: Headers }).headers;
+  if (headers && typeof headers.set === "function") {
+    headers.set("x-content-type-options", "nosniff");
+    headers.set("referrer-policy", "strict-origin-when-cross-origin");
+    headers.set("permissions-policy", "camera=(), microphone=(), geolocation=()");
+    headers.set("x-dns-prefetch-control", "off");
+    headers.set("strict-transport-security", "max-age=31536000; includeSubDomains");
+  }
+  return response;
+});
+
 // Start installs this automatically when src/start.ts is absent; defining the
 // file opts out, so re-add it explicitly to keep server functions protected
 // from cross-site requests.
@@ -35,5 +49,5 @@ const attachAuthorToken = createMiddleware({ type: "function" }).client(async ({
 
 export const startInstance = createStart(() => ({
   functionMiddleware: [attachSupabaseAuth, attachAuthorToken],
-  requestMiddleware: [errorMiddleware, csrfMiddleware],
+  requestMiddleware: [errorMiddleware, securityHeaders, csrfMiddleware],
 }));
