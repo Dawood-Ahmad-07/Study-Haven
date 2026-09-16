@@ -10,7 +10,7 @@ export function LogoMark({ className, markClassName }: LogoMarkProps) {
     <span
       aria-hidden="true"
       className={cn(
-        "group/logo relative grid size-9 shrink-0 place-items-center rounded-xl border border-glass-border bg-card shadow-soft backdrop-blur-xl transition-transform duration-300 hover:-translate-y-0.5",
+        "group/logo relative grid size-11 shrink-0 place-items-center rounded-xl border border-glass-border bg-card shadow-soft backdrop-blur-xl transition-transform duration-300 hover:-translate-y-0.5",
         className,
       )}
     >
@@ -41,9 +41,9 @@ export function LogoMark({ className, markClassName }: LogoMarkProps) {
 
 export function Logo({ className, markClassName }: LogoMarkProps) {
   return (
-    <span className={cn("inline-flex items-center gap-2.5", className)}>
+    <span className={cn("inline-flex items-center gap-3", className)}>
       <LogoMark {...(markClassName ? { markClassName } : {})} />
-      <span className="font-display text-[17px] font-semibold">Syllable</span>
+      <span className="font-display text-xl font-semibold">Syllable</span>
     </span>
   );
 }

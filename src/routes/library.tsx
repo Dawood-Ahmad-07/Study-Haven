@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { BookOpenCheck, TriangleAlert } from "lucide-react";
 import { EmptyState, LoadingGrid, PortalShell } from "@/components/portal/PortalShell";
 import { SubjectCard } from "@/components/portal/SubjectCard";
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/library")({
 });
 
 function LibraryPage() {
-  const { data, isLoading, isError, error } = useQuery(subjectsQueryOptions);
+  const { data, isError, error } = useSuspenseQuery(subjectsQueryOptions);
   const subjects = data ?? [];
 
   return (
@@ -39,14 +39,10 @@ function LibraryPage() {
             Pick a subject to open its study hub.
           </p>
         </div>
-        {data ? (
-          <span className="shrink-0 text-sm font-medium text-muted-foreground">
-            {subjects.length} subject{subjects.length === 1 ? "" : "s"}
-          </span>
-        ) : null}
+        <span className="shrink-0 text-sm font-medium text-muted-foreground">
+          {subjects.length} subject{subjects.length === 1 ? "" : "s"}
+        </span>
       </div>
-
-      {isLoading ? <LoadingGrid /> : null}
 
       {isError ? (
         <EmptyState
