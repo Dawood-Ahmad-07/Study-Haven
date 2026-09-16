@@ -21,9 +21,10 @@ export function SubjectCard({
       preload="intent"
       className="glass shadow-soft group flex flex-col overflow-hidden rounded-2xl border border-glass-border transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-glass"
     >
-      {subject.cover_url ? (
+      {subject.cover_url && !coverFailed ? (
         <img
           src={subject.cover_url}
+          onError={() => setCoverFailed(true)}
           alt={`${subject.name} cover`}
           width={640}
           height={320}
