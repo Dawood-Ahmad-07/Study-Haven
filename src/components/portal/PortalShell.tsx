@@ -47,7 +47,9 @@ export function AmbientBackdrop() {
 export function PortalShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { data: status } = useAuthorStatus();
+  const viewOnly = useViewOnly();
+  const { data: status, isFetched } = useAuthorStatus();
+  const showAuthorNav = !viewOnly && isFetched && status?.isAuthor === true;
   const search = useRouterState({ select: (s) => s.location.search }) as { q?: string };
   const [term, setTerm] = useState(search.q ?? "");
 
