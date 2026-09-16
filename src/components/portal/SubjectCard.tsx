@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { useState } from "react";
 import type { SubjectOverview } from "@/lib/portal-data";
 
 export function SubjectCard({
@@ -11,6 +12,8 @@ export function SubjectCard({
   counts: { notes: number; pdfs: number; images: number; links: number; total: number };
   priority?: boolean;
 }) {
+  const [coverFailed, setCoverFailed] = useState(false);
+
   return (
     <Link
       to="/subjects/$slug"
