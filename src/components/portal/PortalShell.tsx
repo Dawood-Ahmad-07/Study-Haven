@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authorLogout, getAuthorStatus } from "@/lib/portal.functions";
 import { cn } from "@/lib/utils";
 import { useViewOnly } from "@/lib/view-mode";
-import { Logo } from "@/components/portal/Logo";
 
 export function useAuthorStatus() {
   const viewOnly = useViewOnly();
@@ -69,8 +68,11 @@ export function PortalShell({ children }: { children: ReactNode }) {
 
       <header className="sticky top-0 z-20 px-3 pt-3 sm:px-6 sm:pt-5">
         <div className="glass-strong shadow-soft mx-auto flex max-w-7xl flex-wrap items-center gap-2.5 rounded-2xl border border-glass-border px-3 py-2.5 sm:gap-4 sm:px-4">
-          <Link to="/" className="shrink-0" aria-label="Learnova home">
-            <Logo />
+          <Link to="/" className="flex shrink-0 items-center gap-2.5">
+            <span className="gradient-brand grid size-8 place-items-center rounded-lg font-display text-sm font-bold text-primary-foreground">
+              S
+            </span>
+            <span className="font-display text-[17px] font-semibold tracking-tight">Syllable</span>
           </Link>
 
           <form
@@ -145,7 +147,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
             </span>
           </div>
           <p className="text-center text-xs text-muted-foreground/70">
-            Learnova — a study material portal. Viewing is open to everyone.
+            Syllable — a study material portal. Viewing is open to everyone.
           </p>
         </div>
       </footer>
