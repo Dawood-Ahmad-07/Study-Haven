@@ -60,7 +60,7 @@ function Entry() {
 
       <div className="relative z-10 mx-auto grid min-h-screen max-w-7xl items-center px-4 py-12 sm:px-6">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <div className="glass shadow-glass rounded-3xl border border-glass-border p-8 sm:p-10">
+          <div className="glass shadow-soft rounded-2xl border border-glass-border p-8 sm:p-10">
             <div className="flex items-center gap-2.5">
               <span className="gradient-brand grid size-9 place-items-center rounded-xl font-display font-bold text-primary-foreground">
                 S
@@ -102,7 +102,7 @@ function Entry() {
             </div>
           </div>
 
-          <div className="glass shadow-glass rounded-3xl border border-glass-border p-7">
+          <div className="glass shadow-soft rounded-2xl border border-glass-border p-7">
             <div className="flex items-center justify-between">
               <h2 className="font-display text-lg font-semibold">Inside the library</h2>
               <span className="text-xs font-medium text-muted-foreground">Live</span>

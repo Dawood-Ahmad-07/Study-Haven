@@ -80,7 +80,7 @@ function Dashboard() {
   if (!statusFetched || (authorised && (isLoading || !data))) {
     return (
       <PortalShell>
-        <div className="glass h-72 animate-pulse rounded-3xl border border-glass-border" />
+        <div className="glass h-72 animate-pulse rounded-2xl border border-glass-border" />
       </PortalShell>
     );
   }
@@ -88,7 +88,7 @@ function Dashboard() {
   if (!authorised || !data) {
     return (
       <PortalShell>
-        <div className="glass rounded-3xl border border-glass-border p-8 text-center">
+        <div className="glass rounded-2xl border border-glass-border p-8 text-center">
           <p className="font-display text-lg font-semibold">Author access required</p>
           <Link to="/author" className="mt-3 inline-block text-sm font-medium text-primary">
             Go to author sign-in
@@ -129,7 +129,7 @@ function Dashboard() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="glass shadow-glass rounded-2xl border border-glass-border p-4"
+            className="glass shadow-soft rounded-2xl border border-glass-border p-4"
           >
             <stat.icon className="size-4 text-primary" />
             <p className="mt-3 font-display text-2xl font-bold">{stat.value}</p>
@@ -154,7 +154,7 @@ function Dashboard() {
         {activeSubject ? (
           <SubjectManager subject={activeSubject} />
         ) : (
-          <div className="glass rounded-3xl border border-glass-border p-10 text-center">
+          <div className="glass rounded-2xl border border-glass-border p-10 text-center">
             <p className="font-display text-lg font-semibold">No subject selected</p>
             <p className="mt-1.5 text-sm text-muted-foreground">
               Create your first subject to start adding notes, files and links.
@@ -206,7 +206,7 @@ function SubjectsPanel({
   const [creating, setCreating] = useState(false);
 
   return (
-    <div className="glass shadow-glass rounded-3xl border border-glass-border p-5">
+    <div className="glass shadow-soft rounded-2xl border border-glass-border p-5">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-lg font-semibold">Subjects</h2>
         <button
@@ -412,7 +412,7 @@ function PasswordPanel() {
   });
 
   return (
-    <div className="glass shadow-glass rounded-3xl border border-glass-border p-5">
+    <div className="glass shadow-soft rounded-2xl border border-glass-border p-5">
       <div className="flex items-center gap-2">
         <KeyRound className="size-4 text-primary" />
         <h2 className="font-display text-lg font-semibold">Author password</h2>
@@ -485,7 +485,7 @@ function StoragePanel() {
   });
 
   return (
-    <div className="glass shadow-glass rounded-3xl border border-glass-border p-5">
+    <div className="glass shadow-soft rounded-2xl border border-glass-border p-5">
       <div className="flex items-center gap-2">
         <Upload className="size-4 text-primary" />
         <h2 className="font-display text-lg font-semibold">Storage</h2>
@@ -516,7 +516,7 @@ function ActivityPanel() {
   });
 
   return (
-    <div className="glass shadow-glass rounded-3xl border border-glass-border p-5">
+    <div className="glass shadow-soft rounded-2xl border border-glass-border p-5">
       <h2 className="font-display text-lg font-semibold">Recent activity</h2>
       <p className="mt-1 text-xs text-muted-foreground">
         A record of author sign-ins and content changes.
@@ -565,7 +565,7 @@ function SubjectManager({ subject }: { subject: Subject }) {
   }, [data, subject.id]);
 
   return (
-    <div className="glass shadow-glass rounded-3xl border border-glass-border p-5 sm:p-6">
+    <div className="glass shadow-soft rounded-2xl border border-glass-border p-5 sm:p-6">
       <h2 className="font-display text-xl font-semibold">{subject.name}</h2>
       <p className="mt-1 text-sm text-muted-foreground">Organise the material inside this subject.</p>
 

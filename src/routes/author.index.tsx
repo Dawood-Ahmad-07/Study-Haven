@@ -67,7 +67,7 @@ function AuthorLogin() {
   return (
     <PortalShell>
       <div className="mx-auto max-w-md">
-        <div className="glass shadow-glass rounded-3xl border border-glass-border p-8">
+        <div className="glass shadow-soft rounded-2xl border border-glass-border p-8">
           <span className="gradient-brand grid size-12 place-items-center rounded-2xl text-primary-foreground">
             <ShieldCheck className="size-5" />
           </span>

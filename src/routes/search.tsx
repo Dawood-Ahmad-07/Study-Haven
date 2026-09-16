@@ -47,7 +47,7 @@ function SearchPage() {
   if (isLoading || !data) {
     return (
       <PortalShell>
-        <div className="glass h-56 animate-pulse rounded-3xl border border-glass-border" />
+        <div className="glass h-56 animate-pulse rounded-2xl border border-glass-border" />
       </PortalShell>
     );
   }
@@ -151,7 +151,7 @@ function ResultRow({
       to="/subjects/$slug"
       params={{ slug: to }}
       preload="intent"
-      className="glass shadow-glass flex items-start gap-4 rounded-3xl border border-glass-border p-5 transition-transform hover:-translate-y-1"
+      className="glass shadow-soft flex items-start gap-4 rounded-2xl border border-glass-border p-5 transition-transform hover:-translate-y-1"
     >
       <span className="gradient-cool grid size-10 shrink-0 place-items-center rounded-xl text-primary-foreground">
         {icon}
