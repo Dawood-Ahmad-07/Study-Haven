@@ -200,7 +200,7 @@ export function LoadingGrid({ count = 6 }: { count?: number }) {
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
-          className="glass h-60 animate-pulse rounded-3xl border border-glass-border"
+          className="glass h-60 animate-pulse rounded-2xl border border-glass-border"
         />
       ))}
     </div>
