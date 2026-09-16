@@ -28,6 +28,9 @@ import { MAX_UPLOAD_BYTES, fileToBase64 } from "@/lib/file-input";
 import { clearAuthorToken, setAuthorToken } from "@/lib/author-token";
 import {
   changeAuthorPassword,
+  checkStorageHealth,
+  listAuditLog,
+  logoutEverywhere,
   deleteLink,
   deleteMaterial,
   deleteNote,
@@ -141,6 +144,8 @@ function Dashboard() {
             counts={(id) => countsFor(data, id).total}
           />
           <PasswordPanel />
+          <StoragePanel />
+          <ActivityPanel />
         </div>
 
         {activeSubject ? (
