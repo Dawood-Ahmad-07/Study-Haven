@@ -1,25 +1,32 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import type { Subject } from "@/lib/portal-data";
+import type { SubjectOverview } from "@/lib/portal-data";
 
 export function SubjectCard({
   subject,
   counts,
+  priority = false,
 }: {
-  subject: Subject;
+  subject: Pick<SubjectOverview, "name" | "slug" | "description" | "cover_url">;
   counts: { notes: number; pdfs: number; images: number; links: number; total: number };
+  priority?: boolean;
 }) {
   return (
     <Link
       to="/subjects/$slug"
       params={{ slug: subject.slug }}
+      preload="intent"
       className="glass shadow-glass group flex flex-col overflow-hidden rounded-3xl border border-glass-border transition-transform duration-300 hover:-translate-y-1"
     >
       {subject.cover_url ? (
         <img
           src={subject.cover_url}
           alt={`${subject.name} cover`}
-          loading="lazy"
+          width={640}
+          height={320}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={priority ? "high" : "auto"}
           className="h-40 w-full object-cover"
         />
       ) : (

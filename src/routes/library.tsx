@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BookOpenCheck, TriangleAlert } from "lucide-react";
 import { EmptyState, LoadingGrid, PortalShell } from "@/components/portal/PortalShell";
 import { SubjectCard } from "@/components/portal/SubjectCard";
-import { countsFor, portalQueryOptions } from "@/lib/portal-data";
+import { countsOf, subjectsQueryOptions } from "@/lib/portal-data";
 
 export const Route = createFileRoute("/library")({
   head: () => ({
@@ -20,11 +20,13 @@ export const Route = createFileRoute("/library")({
       },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(subjectsQueryOptions),
   component: LibraryPage,
 });
 
 function LibraryPage() {
-  const { data, isLoading, isError, error } = useQuery(portalQueryOptions);
+  const { data, isLoading, isError, error } = useQuery(subjectsQueryOptions);
+  const subjects = data ?? [];
 
   return (
     <PortalShell>
@@ -39,7 +41,7 @@ function LibraryPage() {
         </div>
         {data ? (
           <span className="shrink-0 text-sm font-medium text-muted-foreground">
-            {data.subjects.length} subject{data.subjects.length === 1 ? "" : "s"}
+            {subjects.length} subject{subjects.length === 1 ? "" : "s"}
           </span>
         ) : null}
       </div>
@@ -54,7 +56,7 @@ function LibraryPage() {
         />
       ) : null}
 
-      {data && data.subjects.length === 0 ? (
+      {data && subjects.length === 0 ? (
         <EmptyState
           icon={BookOpenCheck}
           title="No subjects yet"
@@ -62,13 +64,14 @@ function LibraryPage() {
         />
       ) : null}
 
-      {data && data.subjects.length > 0 ? (
+      {subjects.length > 0 ? (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {data.subjects.map((subject) => (
+          {subjects.map((subject, index) => (
             <SubjectCard
               key={subject.id}
               subject={subject}
-              counts={countsFor(data, subject.id)}
+              counts={countsOf(subject)}
+              priority={index < 3}
             />
           ))}
         </div>
