@@ -82,7 +82,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
               navigate({ to: "/search", search: { q: term } });
             }}
           >
-            <label className="glass flex items-center gap-3 rounded-xl border border-glass-border px-4 py-2.5 focus-within:ring-2 focus-within:ring-ring/40">
+            <label className="flex items-center gap-2.5 rounded-full border border-glass-border bg-secondary px-4 py-2 transition-shadow focus-within:ring-2 focus-within:ring-ring/30">
               <Search className="size-4 text-muted-foreground" />
               <input
                 value={term}
