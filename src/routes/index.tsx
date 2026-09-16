@@ -34,12 +34,14 @@ function Entry() {
   async function enterViewOnly() {
     const { clearAuthorToken } = await import("@/lib/author-token");
     clearAuthorToken();
+    setViewOnly();
+    queryClient.removeQueries({ queryKey: ["author-status"] });
     try {
       await authorLogout();
     } catch {
       /* viewing must work even if the sign-out call fails */
     }
-    await queryClient.invalidateQueries({ queryKey: ["author-status"] });
+    queryClient.removeQueries({ queryKey: ["author-status"] });
     navigate({ to: "/library" });
   }
 
