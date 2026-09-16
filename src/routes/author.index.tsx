@@ -46,11 +46,14 @@ function AuthorLogin() {
         navigate({ to: "/author/dashboard" });
         return;
       }
-      setMessage(
-        result.reason === "not-configured"
-          ? "No author password has been set for this portal yet."
-          : "That password is not correct.",
-      );
+      if (result.reason === "not-configured") {
+        setMessage("No author password has been set for this portal yet.");
+      } else if (result.reason === "rate-limited") {
+        const minutes = Math.max(1, Math.ceil((result.retryInSeconds ?? 60) / 60));
+        setMessage(`Too many attempts. Please wait about ${minutes} minute(s) and try again.`);
+      } else {
+        setMessage("That password is not correct.");
+      }
     },
     onError: () => setMessage("Something went wrong. Please try again."),
   });

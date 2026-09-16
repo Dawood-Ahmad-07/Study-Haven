@@ -2,13 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { FileText, Images, Link2, NotebookPen, Search as SearchIcon } from "lucide-react";
 import { EmptyState, PortalShell } from "@/components/portal/PortalShell";
-import { formatDate, portalQueryOptions } from "@/lib/portal-data";
+import { formatDate, searchQueryOptions } from "@/lib/portal-data";
 
 type SearchParams = { q: string };
 
 export const Route = createFileRoute("/search")({
   validateSearch: (search: Record<string, unknown>): SearchParams => ({
-    q: typeof search["q"] === "string" ? (search["q"] as string) : "",
+    q: typeof search["q"] === "string" ? (search["q"] as string).slice(0, 100) : "",
   }),
   head: () => ({
     meta: [
@@ -29,18 +29,10 @@ export const Route = createFileRoute("/search")({
 
 function SearchPage() {
   const { q } = Route.useSearch();
-  const { data, isLoading } = useQuery(portalQueryOptions);
-  const term = q.trim().toLowerCase();
+  const term = q.trim();
+  const { data, isLoading } = useQuery(searchQueryOptions(term));
 
-  if (isLoading) {
-    return (
-      <PortalShell>
-        <div className="glass h-56 animate-pulse rounded-3xl border border-glass-border" />
-      </PortalShell>
-    );
-  }
-
-  if (!term || !data) {
+  if (!term) {
     return (
       <PortalShell>
         <EmptyState
@@ -52,19 +44,20 @@ function SearchPage() {
     );
   }
 
-  const subjectName = (id: string) =>
-    data.subjects.find((s) => s.id === id)?.name ?? "Unknown subject";
-  const subjectSlug = (id: string) => data.subjects.find((s) => s.id === id)?.slug ?? "";
+  if (isLoading || !data) {
+    return (
+      <PortalShell>
+        <div className="glass h-56 animate-pulse rounded-3xl border border-glass-border" />
+      </PortalShell>
+    );
+  }
 
-  const match = (...values: (string | null | undefined)[]) =>
-    values.some((value) => value?.toLowerCase().includes(term));
+  const index = data.subjectIndex;
+  const subjectName = (id: string) => index[id]?.name ?? "Unknown subject";
+  const subjectSlug = (id: string) => index[id]?.slug ?? "";
 
-  const subjects = data.subjects.filter((s) => match(s.name, s.description));
-  const notes = data.notes.filter((n) => match(n.title, n.content, n.topic));
-  const files = data.files.filter((f) => match(f.title, f.description));
-  const links = data.links.filter((l) => match(l.title, l.description, l.url));
-
-  const total = subjects.length + notes.length + files.length + links.length;
+  const total =
+    data.subjects.length + data.notes.length + data.files.length + data.links.length;
 
   return (
     <PortalShell>
@@ -86,18 +79,18 @@ function SearchPage() {
       ) : null}
 
       <div className="mt-6 grid gap-4">
-        {subjects.map((subject) => (
+        {data.subjects.map((subject) => (
           <ResultRow
             key={`subject-${subject.id}`}
             icon={<NotebookPen className="size-4" />}
             kind="Subject"
             title={subject.name}
-            detail={subject.description}
+            detail={subject.description ?? ""}
             subject={subject.name}
             to={subject.slug}
           />
         ))}
-        {notes.map((note) => (
+        {data.notes.map((note) => (
           <ResultRow
             key={`note-${note.id}`}
             icon={<NotebookPen className="size-4" />}
@@ -109,7 +102,7 @@ function SearchPage() {
             meta={`Updated ${formatDate(note.updated_at)}`}
           />
         ))}
-        {files.map((file) => (
+        {data.files.map((file) => (
           <ResultRow
             key={`file-${file.id}`}
             icon={file.kind === "pdf" ? <FileText className="size-4" /> : <Images className="size-4" />}
@@ -120,7 +113,7 @@ function SearchPage() {
             to={subjectSlug(file.subject_id)}
           />
         ))}
-        {links.map((link) => (
+        {data.links.map((link) => (
           <ResultRow
             key={`link-${link.id}`}
             icon={<Link2 className="size-4" />}
@@ -157,6 +150,7 @@ function ResultRow({
     <Link
       to="/subjects/$slug"
       params={{ slug: to }}
+      preload="intent"
       className="glass shadow-glass flex items-start gap-4 rounded-3xl border border-glass-border p-5 transition-transform hover:-translate-y-1"
     >
       <span className="gradient-cool grid size-10 shrink-0 place-items-center rounded-xl text-primary-foreground">

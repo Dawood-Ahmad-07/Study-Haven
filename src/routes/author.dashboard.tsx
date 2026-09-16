@@ -17,17 +17,20 @@ import {
 import { toast } from "sonner";
 import { PortalShell, useAuthorStatus } from "@/components/portal/PortalShell";
 import {
-  countsFor,
   formatBytes,
   formatDate,
-  portalQueryOptions,
   type Note,
   type Subject,
   type UsefulLink,
 } from "@/lib/portal-data";
+import { countsFor, portalQueryOptions } from "@/lib/author-data";
 import { MAX_UPLOAD_BYTES, fileToBase64 } from "@/lib/file-input";
+import { clearAuthorToken, setAuthorToken } from "@/lib/author-token";
 import {
   changeAuthorPassword,
+  checkStorageHealth,
+  listAuditLog,
+  logoutEverywhere,
   deleteLink,
   deleteMaterial,
   deleteNote,
@@ -141,6 +144,8 @@ function Dashboard() {
             counts={(id) => countsFor(data, id).total}
           />
           <PasswordPanel />
+          <StoragePanel />
+          <ActivityPanel />
         </div>
 
         {activeSubject ? (
@@ -385,14 +390,17 @@ function SubjectForm({ subject, onDone }: { subject?: Subject; onDone: () => voi
 function PasswordPanel() {
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
+  const [ownerKey, setOwnerKey] = useState("");
 
   const change = useMutation({
-    mutationFn: () => changeAuthorPassword({ data: { current, next } }),
+    mutationFn: () => changeAuthorPassword({ data: { current, next, ownerKey } }),
     onSuccess: (result) => {
       if (result.ok) {
         toast.success(result.message);
         setCurrent("");
         setNext("");
+        setOwnerKey("");
+        if (result.token) setAuthorToken(result.token);
       } else {
         toast.error(result.message);
       }
@@ -407,7 +415,7 @@ function PasswordPanel() {
         <h2 className="font-display text-lg font-semibold">Author password</h2>
       </div>
       <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-        Change it any time. Only you can do this, and it is stored one-way encrypted.
+        Only the owner can change this: it needs the current password plus your private owner key.
       </p>
       <form
         className="mt-4 space-y-3"
@@ -432,10 +440,98 @@ function PasswordPanel() {
           onChange={(event) => setNext(event.target.value)}
           placeholder="New password (min 8 characters)"
         />
+        <input
+          className={fieldClass}
+          type="password"
+          autoComplete="off"
+          value={ownerKey}
+          onChange={(event) => setOwnerKey(event.target.value)}
+          placeholder="Owner key (only you have this)"
+        />
         <button type="submit" disabled={change.isPending} className={`${primaryButton} w-full`}>
           {change.isPending ? "Updating…" : "Update password"}
         </button>
       </form>
+
+      <button
+        type="button"
+        onClick={() => {
+          if (!confirm("Sign out of every device that is currently in author mode?")) return;
+          void logoutEverywhere()
+            .then(() => {
+              clearAuthorToken();
+              window.location.href = "/author";
+            })
+            .catch((error: Error) => toast.error(error.message));
+        }}
+        className={`${ghostButton} mt-3 w-full`}
+      >
+        Log out everywhere
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+function StoragePanel() {
+  const health = useQuery({
+    queryKey: ["storage-health"],
+    queryFn: () => checkStorageHealth(),
+    staleTime: 60_000,
+  });
+
+  return (
+    <div className="glass shadow-glass rounded-3xl border border-glass-border p-5">
+      <div className="flex items-center gap-2">
+        <Upload className="size-4 text-primary" />
+        <h2 className="font-display text-lg font-semibold">Storage</h2>
+      </div>
+      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+        {health.isLoading
+          ? "Checking your file storage…"
+          : (health.data?.message ?? "Storage status is unavailable right now.")}
+      </p>
+      <button
+        type="button"
+        onClick={() => void health.refetch()}
+        className={`${ghostButton} mt-3 w-full`}
+      >
+        Re-check storage
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+function ActivityPanel() {
+  const log = useQuery({
+    queryKey: ["audit-log"],
+    queryFn: () => listAuditLog(),
+    staleTime: 30_000,
+  });
+
+  return (
+    <div className="glass shadow-glass rounded-3xl border border-glass-border p-5">
+      <h2 className="font-display text-lg font-semibold">Recent activity</h2>
+      <p className="mt-1 text-xs text-muted-foreground">
+        A record of author sign-ins and content changes.
+      </p>
+      <ul className="mt-3 max-h-64 space-y-2 overflow-y-auto pr-1 text-xs">
+        {(log.data ?? []).map((entry) => (
+          <li key={entry.id} className="rounded-xl border border-glass-border/70 px-3 py-2">
+            <p className="font-medium">{entry.action.replace(/_/g, " ")}</p>
+            <p className="text-muted-foreground">
+              {entry.target ? `${entry.target} — ` : ""}
+              {formatDate(entry.created_at)}
+            </p>
+          </li>
+        ))}
+        {!log.isLoading && (log.data ?? []).length === 0 ? (
+          <li className="text-muted-foreground">No activity recorded yet.</li>
+        ) : null}
+      </ul>
     </div>
   );
 }

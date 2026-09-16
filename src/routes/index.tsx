@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { BookOpenCheck, Eye, FileText, Images, Link2, ShieldCheck } from "lucide-react";
 import { AmbientBackdrop } from "@/components/portal/PortalShell";
-import { portalQueryOptions } from "@/lib/portal-data";
+import { statsQueryOptions } from "@/lib/portal-data";
 import { authorLogout } from "@/lib/portal.functions";
 
 export const Route = createFileRoute("/")({
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Entry() {
-  const { data } = useQuery(portalQueryOptions);
+  const { data } = useQuery(statsQueryOptions);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -45,14 +45,10 @@ function Entry() {
 
 
   const stats = [
-    { label: "Subjects", value: data?.subjects.length ?? 0, icon: BookOpenCheck },
-    { label: "Notes", value: data?.notes.length ?? 0, icon: FileText },
-    {
-      label: "Files",
-      value: data?.files.length ?? 0,
-      icon: Images,
-    },
-    { label: "Links", value: data?.links.length ?? 0, icon: Link2 },
+    { label: "Subjects", value: data?.subjects ?? 0, icon: BookOpenCheck },
+    { label: "Notes", value: data?.notes ?? 0, icon: FileText },
+    { label: "Files", value: data?.files ?? 0, icon: Images },
+    { label: "Links", value: data?.links ?? 0, icon: Link2 },
   ];
 
   return (

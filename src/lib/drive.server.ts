@@ -88,3 +88,18 @@ export async function deleteFromDrive(driveFileId: string): Promise<void> {
     console.error(`Drive delete failed [${res.status}]: ${await res.text()}`);
   }
 }
+
+/** Quick probe so the dashboard can warn before an upload fails. */
+export async function driveHealth(): Promise<{ ok: boolean; message: string }> {
+  try {
+    const response = await fetch(`${GATEWAY}/drive/v3/about?fields=user,storageQuota`, {
+      headers: headers(),
+    });
+    if (!response.ok) {
+      return { ok: false, message: `Storage check failed (${response.status}).` };
+    }
+    return { ok: true, message: "Google Drive storage is connected and reachable." };
+  } catch (error) {
+    return { ok: false, message: (error as Error).message };
+  }
+}

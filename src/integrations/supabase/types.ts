@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      author_audit_log: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          ip_hash: string | null
+          target: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          target?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          target?: string | null
+        }
+        Relationships: []
+      }
+      author_login_attempts: {
+        Row: {
+          attempts: number
+          created_at: string
+          id: string
+          ip_hash: string
+          locked_until: string | null
+          updated_at: string
+          window_start: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          ip_hash: string
+          locked_until?: string | null
+          updated_at?: string
+          window_start?: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          ip_hash?: string
+          locked_until?: string | null
+          updated_at?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       files: {
         Row: {
           created_at: string
@@ -62,6 +116,13 @@ export type Database = {
             foreignKeyName: "files_subject_id_fkey"
             columns: ["subject_id"]
             isOneToOne: false
+            referencedRelation: "subject_overview"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "files_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
             referencedRelation: "subjects"
             referencedColumns: ["id"]
           },
@@ -96,6 +157,13 @@ export type Database = {
           url?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "links_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subject_overview"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "links_subject_id_fkey"
             columns: ["subject_id"]
@@ -138,6 +206,13 @@ export type Database = {
             foreignKeyName: "notes_subject_id_fkey"
             columns: ["subject_id"]
             isOneToOne: false
+            referencedRelation: "subject_overview"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notes_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
             referencedRelation: "subjects"
             referencedColumns: ["id"]
           },
@@ -148,18 +223,21 @@ export type Database = {
           created_at: string
           id: number
           password_hash: string | null
+          session_version: number
           updated_at: string
         }
         Insert: {
           created_at?: string
           id?: number
           password_hash?: string | null
+          session_version?: number
           updated_at?: string
         }
         Update: {
           created_at?: string
           id?: number
           password_hash?: string | null
+          session_version?: number
           updated_at?: string
         }
         Relationships: []
@@ -199,10 +277,55 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      subject_overview: {
+        Row: {
+          cover_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          images_count: number | null
+          links_count: number | null
+          name: string | null
+          notes_count: number | null
+          pdfs_count: number | null
+          position: number | null
+          slug: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          images_count?: never
+          links_count?: never
+          name?: string | null
+          notes_count?: never
+          pdfs_count?: never
+          position?: number | null
+          slug?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          images_count?: never
+          links_count?: never
+          name?: string | null
+          notes_count?: never
+          pdfs_count?: never
+          position?: number | null
+          slug?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
       [_ in never]: never

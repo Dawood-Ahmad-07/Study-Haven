@@ -1,5 +1,11 @@
 import { queryOptions } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import {
+  getPortalStats,
+  getSubjectDetail,
+  listSubjects,
+  searchPortal,
+  type SubjectOverview,
+} from "@/lib/public.functions";
 
 export type Subject = {
   id: string;
@@ -28,7 +34,6 @@ export type MaterialFile = {
   kind: "pdf" | "image";
   title: string;
   description: string | null;
-  drive_file_id: string;
   mime_type: string;
   size_bytes: number | null;
   view_url: string;
@@ -45,43 +50,40 @@ export type UsefulLink = {
   created_at: string;
 };
 
-export type PortalData = {
-  subjects: Subject[];
-  notes: Note[];
-  files: MaterialFile[];
-  links: UsefulLink[];
-};
+export type { SubjectOverview };
 
-async function fetchPortal(): Promise<PortalData> {
-  const [subjects, notes, files, links] = await Promise.all([
-    supabase.from("subjects").select("*").order("created_at", { ascending: true }),
-    supabase.from("notes").select("*").order("created_at", { ascending: false }),
-    supabase.from("files").select("*").order("created_at", { ascending: false }),
-    supabase.from("links").select("*").order("created_at", { ascending: false }),
-  ]);
-
-  const firstError = subjects.error || notes.error || files.error || links.error;
-  if (firstError) throw new Error(firstError.message);
-
-  return {
-    subjects: (subjects.data ?? []) as Subject[],
-    notes: (notes.data ?? []) as Note[],
-    files: (files.data ?? []) as MaterialFile[],
-    links: (links.data ?? []) as UsefulLink[],
-  };
-}
-
-export const portalQueryOptions = queryOptions({
-  queryKey: ["portal"],
-  queryFn: fetchPortal,
-  staleTime: 30_000,
+export const subjectsQueryOptions = queryOptions({
+  queryKey: ["subjects"],
+  queryFn: () => listSubjects(),
+  staleTime: 60_000,
 });
 
-export function countsFor(data: PortalData, subjectId: string) {
-  const notes = data.notes.filter((n) => n.subject_id === subjectId).length;
-  const pdfs = data.files.filter((f) => f.subject_id === subjectId && f.kind === "pdf").length;
-  const images = data.files.filter((f) => f.subject_id === subjectId && f.kind === "image").length;
-  const links = data.links.filter((l) => l.subject_id === subjectId).length;
+export const statsQueryOptions = queryOptions({
+  queryKey: ["portal-stats"],
+  queryFn: () => getPortalStats(),
+  staleTime: 60_000,
+});
+
+export const subjectDetailQueryOptions = (slug: string) =>
+  queryOptions({
+    queryKey: ["subject", slug],
+    queryFn: () => getSubjectDetail({ data: { slug } }),
+    staleTime: 30_000,
+  });
+
+export const searchQueryOptions = (q: string) =>
+  queryOptions({
+    queryKey: ["search", q],
+    queryFn: () => searchPortal({ data: { q } }),
+    staleTime: 15_000,
+    enabled: q.trim().length > 0,
+  });
+
+export function countsOf(subject: SubjectOverview) {
+  const notes = Number(subject.notes_count ?? 0);
+  const pdfs = Number(subject.pdfs_count ?? 0);
+  const images = Number(subject.images_count ?? 0);
+  const links = Number(subject.links_count ?? 0);
   return { notes, pdfs, images, links, total: notes + pdfs + images + links };
 }
 
