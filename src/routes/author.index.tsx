@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { KeyRound, ShieldCheck } from "lucide-react";
 import { PortalShell, useAuthorStatus } from "@/components/portal/PortalShell";
 import { authorLogin } from "@/lib/portal.functions";
+import { clearViewOnly } from "@/lib/view-mode";
 
 export const Route = createFileRoute("/author/")({
   head: () => ({
