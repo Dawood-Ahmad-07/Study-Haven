@@ -5,6 +5,7 @@ import { AmbientBackdrop } from "@/components/portal/PortalShell";
 import { statsQueryOptions } from "@/lib/portal-data";
 import { authorLogout } from "@/lib/portal.functions";
 import { clearViewOnly, setViewOnly } from "@/lib/view-mode";
+import { Logo } from "@/components/portal/Logo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,10 +63,7 @@ function Entry() {
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
           <div className="glass shadow-soft rounded-2xl border border-glass-border p-8 sm:p-10">
             <div className="flex items-center gap-2.5">
-              <span className="gradient-brand grid size-9 place-items-center rounded-xl font-display font-bold text-primary-foreground">
-                S
-              </span>
-              <span className="font-display text-lg font-semibold tracking-tight">Syllable</span>
+              <Logo />
             </div>
 
             <p className="mt-8 text-xs font-semibold uppercase tracking-[0.22em] text-primary">

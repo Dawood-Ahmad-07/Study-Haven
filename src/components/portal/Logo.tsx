@@ -42,7 +42,7 @@ export function LogoMark({ className, markClassName }: LogoMarkProps) {
 export function Logo({ className, markClassName }: LogoMarkProps) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <LogoMark markClassName={markClassName} />
+      <LogoMark {...(markClassName ? { markClassName } : {})} />
       <span className="font-display text-[17px] font-semibold">Syllable</span>
     </span>
   );
