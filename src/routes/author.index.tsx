@@ -5,6 +5,7 @@ import { KeyRound, ShieldCheck } from "lucide-react";
 import { PortalShell, useAuthorStatus } from "@/components/portal/PortalShell";
 import { authorLogin } from "@/lib/portal.functions";
 import { clearViewOnly } from "@/lib/view-mode";
+import { LogoMark } from "@/components/portal/Logo";
 
 export const Route = createFileRoute("/author/")({
   head: () => ({
