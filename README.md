@@ -1,243 +1,206 @@
-# Study Haven
+# 📚 Study Haven
 
-Build a professional, modern and fully responsive Study Portal for me.
+> **A modern, secure, and organized digital study-material portal.**
 
-The app should be a clean digital study-material library where normal visitors can only view content, while I can manage all content through a secure Author mode.
+Study Haven is a clean and responsive study platform designed to make academic resources easy to **organize, manage, search, and access**.
 
-1. Entry Screen
+The platform provides an open **Viewer Mode** for students and a protected **Author Mode** for managing study content.
 
-When the website opens, show a beautiful minimal welcome screen with two options:
+## ✨ Features
 
-👁 Only View
-🔐 Author
+### 👁 Viewer Mode
 
-Only View
+* No account or signup required
+* Browse available subjects
+* Read study notes
+* Open PDFs
+* View study images
+* Access useful external links
+* Search across available study material
+* Fully responsive on desktop and mobile
 
-No login or signup required.
+### 🔐 Author Mode
 
-User enters the main app directly.
+A secure dashboard for managing the entire study portal.
 
-User can only view/read content.
+* Add, edit, and delete subjects
+* Add subject cover images and descriptions
+* Create and manage notes
+* Upload PDFs
+* Upload study images
+* Add and manage useful links
+* Organize resources inside subjects
+* View basic content statistics
 
-User cannot add, edit or delete anything.
+### 📖 Subject Organization
 
-Author
+Each subject has its own dedicated space with organized sections:
 
-Ask for an Author password.
+* 📝 Notes
+* 📄 PDFs
+* 🖼️ Images
+* 🔗 Useful Links
 
-I will set the password myself through secure environment/secrets.
+This keeps study material structured and easy to find.
 
-Never expose or hard-code the password in frontend code.
+### 🔎 Global Search
 
-Only the correct password can open Author Dashboard.
+Search through:
 
-Do not create Google login or normal user accounts. The public viewing experience must remain completely open.
+* Subjects
+* Notes
+* PDFs
+* Links
 
-2. Author Dashboard
+Search results are connected to their relevant subjects for easier navigation.
 
-After successful Author access, show a professional dashboard where I can manage the entire portal.
+## 🛡️ Security
 
-I should be able to:
+Study Haven separates public viewing from content management.
 
-Add unlimited subjects
+**Viewer Mode**
 
-Edit subjects
+* Read-only access
+* Cannot add content
+* Cannot edit content
+* Cannot delete content
+* Cannot upload files
+* Cannot access the Author Dashboard
 
-Delete subjects
+**Author Mode**
 
-Add subject name
+* Protected by an Author password
+* Sensitive credentials are intended to be stored through environment variables/secrets
+* Content-management operations are restricted to authorized users
 
-Add subject cover picture
+> Security should be enforced at the backend level rather than relying only on hidden frontend buttons.
 
-Add subject description
+## 🎨 Design
 
-Add notes
+Study Haven focuses on a modern learning experience instead of a traditional basic school website.
 
-Edit/delete notes
+* Modern dark interface
+* Clean typography
+* Responsive layout
+* Subject cards
+* Rounded UI components
+* Professional navigation
+* Subtle animations
+* Clean icons
+* Loading, empty, and error states
+* Desktop and mobile support
 
-Upload PDFs
+## 🧰 Tech Stack
 
-Upload study images
-
-Add useful external links
-
-Edit/delete links
-
-Organize content inside subjects
-
-Also show simple statistics:
-
-Total Subjects
-
-Total Notes
-
-Total PDFs
-
-Total Images
-
-Total Links
-
-3. Subjects
-
-Display subjects as beautiful cards with:
-
-Cover image
-
-Subject name
-
-Short description
-
-Number of available materials
-
-Clicking a subject opens its dedicated page.
-
-Each subject should have clear sections for:
-
-Notes | PDFs | Images | Useful Links
-
-Make everything easy to browse.
-
-4. Notes
-
-Each note should support:
-
-Title
-
-Content
-
-Optional topic/category
-
-Created/updated date
-
-Notes should be displayed in a clean, highly readable format.
-
-5. PDFs & Images
-
-I should be able to upload PDFs and images from Author mode.
-
-Store the actual files using a suitable free storage solution, preferably Google Drive, while keeping file information/metadata organized separately.
-
-Users should be able to view/open the available PDFs and images from the portal.
-
-Do not require users to have Google accounts just to view the content.
-
-6. Search
-
-Add a global search bar so visitors can search:
-
-Subjects
-
-Notes
-
-PDFs
-
-Links
-
-Search results should clearly show the related subject.
-
-7. Design
-
-The website must look like a professional modern study platform, not a basic school website.
-
-Use:
-
-Clean modern layout
-
-Premium typography
-
-Professional sidebar/navigation
-
-Beautiful subject cards
-
-Rounded components
-
-Proper spacing
-
-Subtle animations
-
-Responsive desktop/mobile design
-
-Dark modern theme with tasteful accent colors
-
-Clean icons
-
-Good empty/loading/error states
-
-Keep the interface simple and fast.
-
-8. Security & Permissions
-
-The most important rule:
-
-Only Author mode can modify content.
-
-Normal visitors must never be able to:
-
-Add content
-
-Edit content
-
-Delete content
-
-Upload files
-
-Access the Author dashboard
-
-Do not simply hide buttons. Protect Author operations properly on the backend as well.
-
-Keep the project secure and use environment variables/secrets for sensitive credentials.
-
-9. Free-First Architecture
-
-Keep the entire project as close to $0 cost as realistically possible.
-
-Prefer:
-
-Lovable for development
-
-Free hosting/deployment option
-
-Free database
-
-Google Drive/free storage for PDFs and images
-
-No paid APIs
-
-No unnecessary paid services
-
-No mandatory user accounts
-
-Do not claim unlimited/lifetime free storage; design the storage layer so it can be replaced later if needed.
-
-10. Important
-
-Do not add AI, chatbot, planner, productivity tools, voice features, social features, ads, or unnecessary features.
-
-The purpose of this version is simply:
-
-A beautiful, professional and easy-to-use study material portal where anyone can view content and only the authorized Author can manage it.
-
-Make all major features actually functional, not just visual placeholders.
-
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://learn-garden-master.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/07b3aa76-5462-48dd-aaf1-c48cb1996694).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+* **React**
+* **TypeScript**
+* **Vite**
+* **Tailwind CSS**
+* **shadcn/ui**
+* **Supabase**
+* **Lovable**
+* **Bun / npm**
+
+## 🏗️ Architecture
+
+```text
+Study Haven
+│
+├── Public Viewer
+│   ├── Subjects
+│   ├── Notes
+│   ├── PDFs
+│   ├── Images
+│   └── Useful Links
+│
+├── Global Search
+│
+└── Author Dashboard
+    ├── Subject Management
+    ├── Notes Management
+    ├── PDF Management
+    ├── Image Management
+    └── Link Management
+```
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Dawood-Ahmad-07/Study-Haven.git
+```
+
+### 2. Navigate to the project
+
+```bash
+cd Study-Haven
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Start the development server
+
+```bash
 npm run dev
 ```
+
+The application will then be available on the local development server.
+
+## 🌐 Live Demo
+
+**Study Haven:**
+https://learn-garden-master.lovable.app
+
+## 🎯 Project Goal
+
+The goal of Study Haven is simple:
+
+> **Create one organized place where students can easily access their study material, while keeping content management restricted to the authorized author.**
+
+The project intentionally focuses on the core study-library experience rather than adding unnecessary features such as chatbots, planners, social features, or other productivity tools.
+
+## 💰 Free-First Approach
+
+Study Haven was designed with a **free-first architecture** in mind.
+
+The project aims to minimize unnecessary costs by preferring:
+
+* Free development tools
+* Free hosting options
+* Free database solutions
+* Free/low-cost file storage
+* No mandatory user accounts
+* No paid APIs where they are unnecessary
+
+The storage layer can also be replaced later if the project's requirements grow.
+
+## 🛣️ Future Improvements
+
+Possible future improvements include:
+
+* 📌 Better resource categorization
+* 🔍 Advanced search and filtering
+* 📱 Further mobile optimization
+* 📊 More detailed author analytics
+* 🗂️ Improved file organization
+* ⭐ Bookmark/favorite resources
+* ⚡ Performance improvements
+
+## 👨‍💻 Author
+
+**Dawood Ahmad**
+
+BSIT Student & Developer
+
+* GitHub: [@Dawood-Ahmad-07](https://github.com/Dawood-Ahmad-07)
+
+---
+
+### ⭐ If you find Study Haven useful, consider giving the repository a star!
+
+**Built with ❤️ for a better study experience.**
