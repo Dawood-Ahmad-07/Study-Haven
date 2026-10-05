@@ -6,6 +6,7 @@ import { statsQueryOptions } from "@/lib/portal-data";
 import { authorLogout } from "@/lib/portal.functions";
 import { clearViewOnly, setViewOnly } from "@/lib/view-mode";
 import { Logo } from "@/components/portal/Logo";
+import { LockedScreen, usePortalLock } from "@/components/portal/PortalLock";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,6 +31,7 @@ function Entry() {
   const { data } = useQuery(statsQueryOptions);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { data: lock } = usePortalLock();
 
   // "Only View" always enters as a plain visitor: any leftover author session
   // from an earlier sign-in on this device is ended first.
