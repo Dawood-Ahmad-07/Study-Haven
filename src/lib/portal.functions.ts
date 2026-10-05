@@ -44,6 +44,11 @@ export const authorLogin = createServerFn({ method: "POST" })
       };
     }
 
+    const { getPortalLocked } = await import("./author.server");
+    if (await getPortalLocked()) {
+      return { ok: false as const, reason: "locked" as const, retryInSeconds: 0 };
+    }
+
     const stored = await getStoredPasswordHash();
     if (!stored) {
       return { ok: false as const, reason: "not-configured" as const, retryInSeconds: 0 };
@@ -69,6 +74,69 @@ export const authorLogout = createServerFn({ method: "POST" }).handler(async () 
   await session.clear();
   return { ok: true as const };
 });
+
+/** Public: is the portal currently locked? */
+export const getPortalLock = createServerFn({ method: "GET" }).handler(async () => {
+  const { getPortalLocked } = await import("./author.server");
+  return { locked: await getPortalLocked() };
+});
+
+/** Owner-only on/off switch. Needs the author password AND the owner key; works even while locked. */
+export const setPortalLock = createServerFn({ method: "POST" })
+  .inputValidator((data: { password: string; ownerKey: string; locked: boolean }) =>
+    z
+      .object({
+        password: z.string().min(1).max(200),
+        ownerKey: z.string().min(1).max(400),
+        locked: z.boolean(),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data }) => {
+    const {
+      requestIpHash,
+      checkLoginAllowed,
+      registerFailedLogin,
+      clearLoginAttempts,
+      getStoredPasswordHash,
+      verifyPassword,
+      verifyOwnerKey,
+      ownerKeyConfigured,
+      setPortalLocked,
+      bumpSessionVersion,
+      getAuthorSession,
+      audit,
+    } = await import("./author.server");
+
+    const ipHash = await requestIpHash();
+    const gate = await checkLoginAllowed(ipHash);
+    if (!gate.allowed) {
+      const minutes = Math.max(1, Math.ceil(gate.retryInSeconds / 60));
+      return { ok: false as const, message: `Too many attempts. Wait about ${minutes} minute(s).` };
+    }
+    if (!ownerKeyConfigured()) {
+      return { ok: false as const, message: "The owner key is not set up yet." };
+    }
+    const stored = await getStoredPasswordHash();
+    const passOk = stored ? await verifyPassword(data.password, stored) : false;
+    const keyOk = verifyOwnerKey(data.ownerKey);
+    if (!passOk || !keyOk) {
+      await registerFailedLogin(ipHash);
+      await audit("portal_lock_denied");
+      return { ok: false as const, message: "Password or owner key is not correct." };
+    }
+    await clearLoginAttempts(ipHash);
+
+    await setPortalLocked(data.locked);
+    if (data.locked) {
+      // Sign every author out on every device.
+      await bumpSessionVersion();
+      const session = await getAuthorSession();
+      await session.clear();
+    }
+    await audit(data.locked ? "portal_locked" : "portal_unlocked");
+    return { ok: true as const, message: data.locked ? "Portal locked." : "Portal unlocked." };
+  });
 
 /** Invalidates every author token and cookie session issued so far. */
 export const logoutEverywhere = createServerFn({ method: "POST" }).handler(async () => {

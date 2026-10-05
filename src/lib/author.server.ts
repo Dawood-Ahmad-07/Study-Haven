@@ -110,7 +110,23 @@ export async function currentAuthorToken(): Promise<string | undefined> {
   return getRequestHeader("x-author-token" as never) as string | undefined;
 }
 
+/* Portal lock — when on, nobody (viewers or authors) can use the portal. */
+export async function getPortalLocked(): Promise<boolean> {
+  const { data } = await (await db())
+    .from("portal_lock")
+    .select("locked")
+    .eq("id", 1)
+    .maybeSingle();
+  return data?.locked === true;
+}
+
+export async function setPortalLocked(locked: boolean): Promise<void> {
+  const { error } = await (await db()).from("portal_lock").upsert({ id: 1, locked });
+  if (error) throw new Error(error.message);
+}
+
 export async function isAuthor(): Promise<boolean> {
+  if (await getPortalLocked()) return false;
   const header = await currentAuthorToken();
   if (await verifyAuthorToken(header)) return true;
   const session = await getAuthorSession();
