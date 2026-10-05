@@ -44,11 +44,12 @@ export function PortalShell({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
   const viewOnly = useViewOnly();
   const { data: status, isFetched } = useAuthorStatus();
-  const showAuthorNav = !viewOnly && isFetched && lock?.locked !== true && status?.isAuthor === true;
+  const showAuthorNav = !viewOnly && isFetched && status?.isAuthor === true;
   const search = useRouterState({ select: (s) => s.location.search }) as { q?: string };
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { data: lock } = usePortalLock();
   const locked = lock?.locked === true;
+  const showNav = showAuthorNav && !locked;
   const [term, setTerm] = useState(search.q ?? "");
 
   useEffect(() => {
@@ -104,7 +105,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
               <Library className="size-4" />
               Library
             </Link>
-            {showAuthorNav ? (
+            {showNav ? (
               <>
                 <Link
                   to="/author/dashboard"
