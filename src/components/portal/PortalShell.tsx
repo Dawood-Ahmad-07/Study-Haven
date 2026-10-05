@@ -6,6 +6,7 @@ import { authorLogout, getAuthorStatus } from "@/lib/portal.functions";
 import { cn } from "@/lib/utils";
 import { useViewOnly } from "@/lib/view-mode";
 import { Logo } from "@/components/portal/Logo";
+import { LockedScreen, usePortalLock } from "@/components/portal/PortalLock";
 
 export function useAuthorStatus() {
   const viewOnly = useViewOnly();
@@ -45,6 +46,10 @@ export function PortalShell({ children }: { children: ReactNode }) {
   const { data: status, isFetched } = useAuthorStatus();
   const showAuthorNav = !viewOnly && isFetched && status?.isAuthor === true;
   const search = useRouterState({ select: (s) => s.location.search }) as { q?: string };
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { data: lock } = usePortalLock();
+  const locked = lock?.locked === true;
+  const showNav = showAuthorNav && !locked;
   const [term, setTerm] = useState(search.q ?? "");
 
   useEffect(() => {
@@ -100,7 +105,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
               <Library className="size-4" />
               Library
             </Link>
-            {showAuthorNav ? (
+            {showNav ? (
               <>
                 <Link
                   to="/author/dashboard"
@@ -130,7 +135,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
       </header>
 
       <main className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-20 pt-8 sm:px-6">
-        {children}
+        {locked && !pathname.startsWith("/author") ? <LockedScreen /> : children}
       </main>
 
       <footer className="relative z-10 px-4 pb-8 pt-4 sm:px-6">

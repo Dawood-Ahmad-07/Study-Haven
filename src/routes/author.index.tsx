@@ -5,6 +5,7 @@ import { KeyRound, ShieldCheck } from "lucide-react";
 import { PortalShell, useAuthorStatus } from "@/components/portal/PortalShell";
 import { authorLogin } from "@/lib/portal.functions";
 import { clearViewOnly } from "@/lib/view-mode";
+import { LockForm, usePortalLock } from "@/components/portal/PortalLock";
 
 export const Route = createFileRoute("/author/")({
   head: () => ({
@@ -29,6 +30,7 @@ function AuthorLogin() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: status } = useAuthorStatus();
+  const { data: lock } = usePortalLock();
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
 
@@ -54,6 +56,8 @@ function AuthorLogin() {
       }
       if (result.reason === "not-configured") {
         setMessage("No author password has been set for this portal yet.");
+      } else if (result.reason === "locked") {
+        setMessage("The portal is locked. Unlock it with your password and owner key.");
       } else if (result.reason === "rate-limited") {
         const minutes = Math.max(1, Math.ceil((result.retryInSeconds ?? 60) / 60));
         setMessage(`Too many attempts. Please wait about ${minutes} minute(s) and try again.`);
@@ -63,6 +67,23 @@ function AuthorLogin() {
     },
     onError: () => setMessage("Something went wrong. Please try again."),
   });
+
+  if (lock?.locked) {
+    return (
+      <PortalShell>
+        <div className="mx-auto max-w-md">
+          <div className="glass shadow-soft rounded-2xl border border-glass-border p-8">
+            <h1 className="font-display text-2xl font-bold tracking-tight">Portal is locked</h1>
+            <p className="mt-2 mb-6 text-sm leading-relaxed text-muted-foreground">
+              Everyone is logged out. Only the owner can switch it back on with the author password
+              and the owner key.
+            </p>
+            <LockForm target={false} />
+          </div>
+        </div>
+      </PortalShell>
+    );
+  }
 
   return (
     <PortalShell>

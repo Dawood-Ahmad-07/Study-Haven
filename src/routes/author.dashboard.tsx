@@ -27,6 +27,7 @@ import { countsFor, portalQueryOptions } from "@/lib/author-data";
 import { MAX_UPLOAD_BYTES, fileToBase64 } from "@/lib/file-input";
 import { clearAuthorToken, setAuthorToken } from "@/lib/author-token";
 import { useViewOnly } from "@/lib/view-mode";
+import { LockForm } from "@/components/portal/PortalLock";
 import {
   changeAuthorPassword,
   checkStorageHealth,
@@ -147,6 +148,7 @@ function Dashboard() {
             counts={(id) => countsFor(data, id).total}
           />
           <PasswordPanel />
+          <LockPanel />
           <StoragePanel />
           <ActivityPanel />
         </div>
@@ -389,6 +391,25 @@ function SubjectForm({ subject, onDone }: { subject?: Subject; onDone: () => voi
 }
 
 /* ------------------------------------------------------------------ */
+
+function LockPanel() {
+  return (
+    <div className="glass shadow-soft rounded-2xl border border-glass-border p-5">
+      <h2 className="font-display text-lg font-semibold">Lock portal</h2>
+      <p className="mt-1.5 mb-4 text-xs leading-relaxed text-muted-foreground">
+        Closes Learnova for everyone and logs out every viewer and author until you unlock it.
+        Needs the author password plus your owner key.
+      </p>
+      <LockForm
+        target={true}
+        onDone={() => {
+          clearAuthorToken();
+          window.location.href = "/author";
+        }}
+      />
+    </div>
+  );
+}
 
 function PasswordPanel() {
   const [current, setCurrent] = useState("");

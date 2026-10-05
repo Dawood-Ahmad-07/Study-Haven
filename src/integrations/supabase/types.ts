@@ -218,6 +218,24 @@ export type Database = {
           },
         ]
       }
+      portal_lock: {
+        Row: {
+          id: number
+          locked: boolean
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          locked?: boolean
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          locked?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       portal_settings: {
         Row: {
           created_at: string
@@ -324,6 +342,7 @@ export type Database = {
       }
     }
     Functions: {
+      portal_locked: { Args: never; Returns: boolean }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
     }
