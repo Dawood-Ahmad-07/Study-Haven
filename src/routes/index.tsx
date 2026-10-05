@@ -57,6 +57,17 @@ function Entry() {
     { label: "Links", value: data?.links ?? 0, icon: Link2 },
   ];
 
+  if (lock?.locked) {
+    return (
+      <div className="relative min-h-screen font-body">
+        <AmbientBackdrop />
+        <div className="relative z-10 grid min-h-screen place-items-center px-4">
+          <LockedScreen />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative min-h-screen font-body">
       <AmbientBackdrop />
